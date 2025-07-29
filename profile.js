@@ -26,7 +26,7 @@ async function loadUserAvatar(userId) {
   const { data, error } = await supabase
     .from('profiles')
     .select('avatar_url')
-    .eq('id', userId)
+    .eq('user_id', userId)
     .single();
 
   if (error) return console.error("Avatar fetch failed:", error.message);
@@ -66,7 +66,7 @@ async function uploadAvatar() {
   const { error: dbError } = await supabase
     .from('profiles')
     .update({ avatar_url: imageURL })
-    .eq('id', user.id);
+    .eq('user_id', user.id);
 
   if (dbError) return alert(`DB update failed: ${dbError.message}`);
 

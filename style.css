@@ -6,3 +6,9 @@
 body {
   transition: background-color 0.3s ease;
 }
+img {
+  max-height: 200px;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}

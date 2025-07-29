@@ -10,7 +10,7 @@ function renderDishes() {
   dishMenu.innerHTML = "";
   dishes.forEach((dish) => {
     const card = document.createElement("div");
-    card.className = "bg-white p-4 rounded shadow hover:scale-105 transition cursor-pointer";
+    card.className = "bg-white p-4 rounded shadow hover:scale-105 transition cursor-pointer w-full sm:w-[48%] lg:w-[30%] mb-4";
     card.innerHTML = `
       <img src="${dish.image_url}" alt="${dish.title}" class="rounded mb-2 w-full h-40 object-cover" />
       <h3 class="text-lg font-semibold">${dish.title}</h3>

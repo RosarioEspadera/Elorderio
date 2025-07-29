@@ -6,7 +6,7 @@ async function login() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  const { error, data } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     alert("Login failed: " + error.message);
@@ -16,12 +16,12 @@ async function login() {
   }
 }
 
-// ✍️ Signup function (optional)
+// ✍️ Signup function
 async function signUp() {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  const { error, data } = await supabase.auth.signUp({ email, password });
+  const { error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
     alert("Signup failed: " + error.message);

@@ -227,4 +227,34 @@ footer {
   color: #777;
   margin-top: 1rem;
 }
+.bottom-tab {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff5eb;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 0;
+  z-index: 999;
+}
+
+.tab-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #7b4c30;
+  font-size: 0.8rem;
+  transition: color 0.3s;
+}
+
+.tab-link span {
+  font-size: 1.2rem;
+}
+
+.tab-link:hover {
+  color: #a15c2f;
+}
 

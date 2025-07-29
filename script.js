@@ -42,3 +42,4 @@ form.addEventListener("submit", (e) => {
 });
 
 renderDishes();
+

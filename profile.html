@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curio Profile</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="profile.js" defer></script>
+</head>
+<body class="bg-amber-50 text-gray-900 font-sans p-6">
+
+  <header class="text-center p-6 bg-yellow-100 rounded shadow">
+    <h1 class="text-3xl font-bold text-amber-800">Curio Profile</h1>
+    <p class="text-lg text-gray-600">Your dish gallery starts with your identity 🍳</p>
+  </header>
+
+  <main>
+    <div class="profile-wrapper">
+      <h2 class="greeting">Welcome, <span id="user-email">Loading...</span></h2>
+
+      <div class="avatar-section">
+        <img id="avatar-preview" src="default.png" alt="Profile Picture" class="avatar-img" />
+        <label for="avatar-upload" class="avatar-label">Choose a photo:</label>
+        <input type="file" id="avatar-upload" accept="image/*" class="avatar-input" />
+        <button class="upload-btn" onclick="uploadAvatar()">Upload Photo</button>
+      </div>
+
+      <div class="profile-info">
+        <p class="info-note">Your profile photo will be stored securely and visible on your account page.</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -1,5 +1,7 @@
 const dishMenu = document.getElementById("dish-menu");
 const form = document.getElementById("order-form");
+const cartTable = document.getElementById("cart-table").querySelector("tbody");
+const cartTotal = document.getElementById("cart-total");
 emailjs.init("AqvkFhQnxowOJda9J");
 
 const cart = [];
@@ -18,7 +20,16 @@ function renderDishes() {
     dishMenu.appendChild(card);
   });
 }
+function updateCartPreview() {
+  cartTable.innerHTML = cart.map(item => `
+    <tr>
+      <td>${item.qty} x ${item.name}</td>
+      <td class="text-right">₱${item.qty * item.price}</td>
+    </tr>
+  `).join("");
 
+  cartTotal.textContent = `₱${calculateTotal()}`;
+}
 function addToCart(name, price) {
   const existing = cart.find(item => item.name === name);
   if (existing) {
@@ -27,6 +38,7 @@ function addToCart(name, price) {
     cart.push({ name, price, qty: 1 });
   }
   alert(`${name} added to order!`);
+  updateCartPreview();
 }
 
 // 🧮 Total calculator
@@ -64,6 +76,7 @@ form.addEventListener("submit", function(e) {
     .then(() => {
       alert("Order sent successfully!");
       cart.length = 0; // reset cart
+      updateCartPreview();
       this.reset();
     }, (error) => {
       console.error("EmailJS failed:", error);

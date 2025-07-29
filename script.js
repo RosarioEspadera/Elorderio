@@ -83,3 +83,25 @@ form.addEventListener("submit", function(e) {
       alert("Failed to send order.");
     });
 });
+// 🔑 Supabase Auth client
+const supabase = createClient('https://bcmibfnrydyzomootwcb.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I');
+
+// ✍️ Sign Up
+async function signUp(email, password) {
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) console.error(error.message);
+  else console.log('User created:', data);
+}
+
+// 🔓 Login
+async function login(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) console.error(error.message);
+  else window.location.href = 'profile.html';
+}
+
+// 👤 Check Auth on `profile.html`
+supabase.auth.getSession().then(({ data }) => {
+  if (!data.session) window.location.href = 'auth.html';
+  else document.getElementById('welcome').innerText = `Welcome back, ${data.session.user.email}`;
+});

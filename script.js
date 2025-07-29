@@ -1,18 +1,6 @@
 const dishMenu = document.getElementById("dish-menu");
 const form = document.getElementById("dish-form");
 
-let dishes = [
-  {
-    title: "Midnight Miso Musings",
-    story: "Inspired by late-night cravings and warm comfort. Shared by Elio.",
-    image_url: "assets/miso.jpg",
-  },
-  {
-    title: "Banana Bliss Theory",
-    story: "Rosario's hypothesis: joy = ripe banana + community.",
-    image_url: "assets/banana.jpg",
-  },
-];
 
 // Render dish cards
 function renderDishes() {
@@ -29,17 +17,4 @@ function renderDishes() {
   });
 }
 
-// Submit new dish
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const title = form.title.value;
-  const story = form.story.value;
-  const image_url = form.image_url.value || "assets/default.jpg";
-
-  dishes.push({ title, story, image_url });
-  renderDishes();
-  form.reset();
-});
-
-renderDishes();
 

@@ -256,17 +256,20 @@
   
 </section>
 
-   <div id="cart-preview" class="mt-6 bg-gray-50 p-4 rounded shadow">
+  <div id="cart-preview" class="mt-6 bg-gray-50 p-4 rounded shadow text-sm sm:text-base">
   <h3 class="text-lg font-semibold mb-2">Your Order</h3>
   <table class="w-full text-sm" id="cart-table">
     <tbody></tbody>
   </table>
-  <p class="mt-2 text-right font-semibold">Total: <span id="cart-total">₱0</span></p>
+  <p class="mt-2 text-right font-semibold text-xs sm:text-sm">
+  Total: <span id="cart-total">₱0</span>
+</p>
+
 </div>
     
 <div class="order-wrapper">
   <h2>Order from Rio’s Café</h2>
-  <form id="order-form">
+  <form id="order-form" class="max-w-md mx-auto px-4">
     <label>Your Name</label>
     <input type="text" name="to_name" required>
 

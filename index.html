@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curio: Menu of Ideas</title>
     <link href="style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </head>
   <body class="bg-amber-50 text-gray-900 font-sans p-6">
     <header class="text-center p-6 bg-yellow-100 rounded shadow">
@@ -21,7 +22,10 @@
       <span class="tag">🌙 Midnight Pick</span>
       <span class="tag">🍃 Vegan</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Midnight Miso Musings', 110)">
+  🍽️ Add to Order
+</button>
+    
   </div>
 </section>
   
@@ -34,7 +38,9 @@
       <span class="tag">🇵🇭 Filipino Staple</span>
       <span class="tag">🍖 Hearty</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Classic Adobo', 100)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -47,7 +53,9 @@
       <span class="tag">🔥 Grilled</span>
       <span class="tag">🎉 Crowd Favorite</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Backyard Barbecue', 120)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -60,7 +68,9 @@
       <span class="tag">🍺 Chill</span>
       <span class="tag">🌇 Sunset Vibes</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Crisp Cold Beer', 60)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -73,7 +83,9 @@
       <span class="tag">☕ Strong</span>
       <span class="tag">✨ Minimal</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+ <button class="remix-btn order-btn" onclick="addToCart('Caffe Macchiato', 80)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -86,7 +98,9 @@
       <span class="tag">🍫 Sweet</span>
       <span class="tag">☕ Energizing</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Caffe Mocha', 90)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -99,7 +113,9 @@
       <span class="tag">🌤️ Brunch Buddy</span>
       <span class="tag">☁️ Fluffy</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Cappuccino', 90)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -112,7 +128,9 @@
       <span class="tag">⚡ Bold</span>
       <span class="tag">🖤 Intense</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Pure Espresso', 75)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -125,7 +143,9 @@
       <span class="tag">❄️ Cool</span>
       <span class="tag">🍋 Tangy</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Iced Tea', 65)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -138,7 +158,9 @@
       <span class="tag">☕ Cozy</span>
       <span class="tag">🌙 Midnight Pick</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Latte', 85)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -151,7 +173,9 @@
       <span class="tag">🍋 Fresh</span>
       <span class="tag">☀️ Bright</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Lemonade', 65)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -164,7 +188,9 @@
       <span class="tag">🧋 Sweet Tooth</span>
       <span class="tag">🎈 Playful</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+  <button class="remix-btn order-btn" onclick="addToCart('Milkshake Delight', 75)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -177,7 +203,9 @@
       <span class="tag">🍝 Classic</span>
       <span class="tag">🌿 Comfort</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Homestyle Pasta', 120)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -190,7 +218,9 @@
       <span class="tag">🥗 Vegan</span>
       <span class="tag">🌿 Fresh</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+   <button class="remix-btn order-btn" onclick="addToCart('Garden Salad', 85)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -203,7 +233,9 @@
       <span class="tag">🥩 Juicy</span>
       <span class="tag">🌕 Midnight Pick</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+  <button class="remix-btn order-btn" onclick="addToCart('Fire-Grilled Steak', 130)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
 
@@ -216,7 +248,9 @@
       <span class="tag">🍷 Elegant</span>
       <span class="tag">🕯️ Slow Evenings</span>
     </div>
-    <button class="remix-btn">Remix This Dish</button>
+    <button class="remix-btn order-btn" onclick="addToCart('Red Wine Sipper', 140)">
+  🍽️ Add to Order
+</button>
   </div>
 </section>
   
@@ -231,11 +265,77 @@
         <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white py-2 px-4 rounded">Add Dish</button>
       </form>
     </section>
+    
+<div class="order-wrapper">
+  <h2>Order from Rio’s Café</h2>
+  <form id="order-form">
+    <label>Your Name</label>
+    <input type="text" name="to_name" required>
+
+    <label>Contact Info</label>
+    <input type="text" name="contact" required>
+
+    <label>Email Address</label>
+    <input type="email" name="reply_to" required>
+
+    <label>Delivery Address</label>
+    <input type="text" name="address" required>
+
+    <label>Special Requests</label>
+    <textarea name="notes" rows="3"></textarea>
+
+    <!-- Dynamic Data Injection -->
+    <input type="hidden" name="item_list">
+    <input type="hidden" name="total">
+
+    <button type="submit">Place Order</button>
+  </form>
+</div>
 
     <footer class="mt-10 text-center text-sm text-gray-500">
       Built with joy by Rosario & Elio 🍽️
     </footer>
+<script>
+  emailjs.init("AqvkFhQnxowOJda9J");
 
+const cart = [];
+
+function addToCart(name, price) {
+  const existing = cart.find(item => item.name === name);
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  alert(`${name} added to order!`);
+}
+
+document.getElementById("order-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const itemList = cart.map(item => `
+    <tr>
+      <td>${item.qty} x ${item.name}</td>
+      <td align="right">₱${item.qty * item.price}</td>
+    </tr>
+  `).join('');
+
+  const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+
+  this.item_list.value = itemList;
+  this.total.value = `₱${total}`;
+
+    emailjs.sendForm("service_epydqmi", "template_vzuexod", this)
+      .then(() => {
+        alert("Order sent successfully!");
+        cart.length = 0; // reset cart
+        this.reset();
+      }, (error) => {
+        console.error("EmailJS failed:", error);
+        alert("Failed to send order.");
+      });
+  });
+</script>
     <script src="script.js"></script>
   </body>
 </html>

@@ -1,61 +1,48 @@
+<!-- chat.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Curio Chat</title>
-  <link rel="icon" href="data:,">
-  <link href="chat.css" rel="stylesheet" />
-  <style>
-    body { margin:0; font-family:sans-serif; display:flex; flex-direction:column; height:100vh; }
-    #message-list { flex:1; overflow-y:auto; padding:1rem; background:#f5f5f5; }
-    .message { margin:0.5rem 0; padding:0.5rem; border-radius:4px; cursor:pointer; }
-    .you { background:#dcf8c6; text-align:right; }
-    .them { background:#fff; text-align:left; }
-    form { display:flex; border-top:1px solid #ccc; }
-    input { flex:1; border:none; padding:0.75rem; font-size:1rem; }
-    button { border:none; background:#0b93f6; color:#fff; padding:0 1rem; cursor:pointer; }
-    /* Modal styles */
-    #reply-modal { display:none; position:fixed; inset:0; align-items:center; justify-content:center; }
-    #reply-modal .backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.5); }
-    #reply-modal .dialog { position:relative; background:#fff; padding:1rem; border-radius:6px; width:90%; max-width:400px; z-index:10; }
-    #reply-modal textarea { width:100%; margin:0.5rem 0; }
-  </style>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="chat.css" />
 </head>
 <body>
 
   <div id="message-list"></div>
 
   <form id="message-form">
-    <input id="message-input" placeholder="Type a message…" autocomplete="off" />
+    <input
+      id="message-input"
+      placeholder="Type a message…"
+      autocomplete="off"
+    />
     <button type="submit">Send</button>
   </form>
 
-  <!-- Reply Modal (created on demand) -->
+  <!-- Reply Modal -->
   <div id="reply-modal">
     <div class="backdrop"></div>
     <div class="dialog">
       <h2 id="reply-title"></h2>
-      <textarea id="reply-content" rows="3" placeholder="Your reply…"></textarea>
-      <div style="text-align:right">
+      <textarea
+        id="reply-content"
+        rows="3"
+        placeholder="Your reply…"
+      ></textarea>
+      <div class="dialog-actions">
         <button id="send-reply">Send</button>
         <button id="close-reply">Cancel</button>
       </div>
     </div>
   </div>
-<nav class="bottom-tab">
-  <a href="index.html" class="tab-link">
-    <span>🍽️</span>
-    <p>Menu</p>
-  </a>
-  <a href="profile.html" class="tab-link">
-    <span>👤</span>
-    <p>Profile</p>
-  </a>
-  <a href="chat.html" class="tab-link">
-    <span>💬</span>
-    <p>Chat</p>
-  </a>
-</nav>
+
+  <nav class="bottom-tab">
+    <a href="index.html"   class="tab-link"><span>🍽️</span><p>Menu</p></a>
+    <a href="profile.html" class="tab-link"><span>👤</span><p>Profile</p></a>
+    <a href="chat.html"    class="tab-link"><span>💬</span><p>Chat</p></a>
+  </nav>
+
   <script type="module" src="chat.js" defer></script>
 </body>
 </html>

@@ -15,18 +15,31 @@ window.addEventListener('beforeunload', () => {
 });
 
 async function init() {
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-  if (sessionError || !session) return window.location.replace('auth.html');
-  
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (error || !session?.user) {
+    window.location.replace('auth.html');
+    return;
+  }
+
   sessionUser = session.user;
 
-  await ensureProfileExists(sessionUser.id, sessionUser.user_metadata);
-  await loadMessages();
-  subscribeToMessages();
+  try {
+    await Promise.all([
+      ensureProfileExists(sessionUser.id, sessionUser.user_metadata),
+      loadMessages()
+    ]);
 
-  const form = document.getElementById('message-form');
-  if (form) form.addEventListener('submit', sendMessage);
+    subscribeToMessages();
+
+    const form = document.getElementById('message-form');
+    form?.addEventListener('submit', sendMessage);
+  } catch (err) {
+    console.error('🚨 Init failed:', err);
+    alert('Something went wrong while setting up chat.');
+  }
 }
+
 
 async function ensureProfileExists(userId, metadata) {
   const { data, error } = await supabase

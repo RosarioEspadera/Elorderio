@@ -38,14 +38,15 @@ async function init() {
 
 // ─── LOAD MESSAGES ─────────────────────────────────────────
 async function loadMessages() {
-  const me    = sessionUser.id;
-  const them  = otherUserId;
+  const me   = sessionUser.id;
+  const them = otherUserId;
 
-  // ← Exactly one pair of () around the two and(...) filters
-  const filter = `(
-    and(user_id.eq.${me},to_user_id.eq.${them}),
-    and(user_id.eq.${them},to_user_id.eq.${me})
-  )`;
+  // just the two AND-clauses, comma-separated
+  const filter = 
+    `and(user_id.eq.${me},to_user_id.eq.${them}),` +
+    `and(user_id.eq.${them},to_user_id.eq.${me})`;
+
+  console.log('Supabase filter:', filter);
 
   const { data, error } = await supabase
     .from('messages')
@@ -73,6 +74,7 @@ async function loadMessages() {
   });
   scrollToBottom();
 }
+
 
 
 // ─── REAL-TIME SUBSCRIBE ────────────────────────────────────

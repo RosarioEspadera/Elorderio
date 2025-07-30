@@ -48,6 +48,14 @@ window.signUp = async function () {
     alert(`Sign-up failed: ${error.message}`);
     return;
   }
+  // ✅ Insert profile immediately after sign-up
+  if (data?.user) {
+    await supabase.from("profiles").insert({
+      id: data.user.id,        // UUID from auth.users
+      user_id: data.user.id,   // your foreign key
+      email: data.user.email   // now stored in profiles
+    });
+  }
 
   alert('Account created! Please check your inbox to confirm.');
 };

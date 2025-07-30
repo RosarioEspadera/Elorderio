@@ -38,27 +38,42 @@ async function init() {
 
 // ─── LOAD MESSAGES ─────────────────────────────────────────
 async function loadMessages() {
-  const me     = sessionUser.id;
-  const them   = otherUserId;
+  const me    = sessionUser.id;
+  const them  = otherUserId;
+
+  // ← Exactly one pair of () around the two and(...) filters
   const filter = `(
-  and(user_id.eq.${me},to_user_id.eq.${them}),
-  and(user_id.eq.${them},to_user_id.eq.${me})
-)`;
+    and(user_id.eq.${me},to_user_id.eq.${them}),
+    and(user_id.eq.${them},to_user_id.eq.${me})
+  )`;
 
-const { data, error } = await supabase
-  .from('messages')
-  .select('*, profiles(email)')
-  .or(filter)
-  .order('created_at', { ascending: true });
+  const { data, error } = await supabase
+    .from('messages')
+    .select(`
+      *,
+      sender:profiles!messages_user_id_fkey(email),
+      recipient:profiles!messages_to_user_id_fkey(email)
+    `)
+    .or(filter)
+    .order('created_at', { ascending: true });
 
+  if (error) {
+    console.error('Load error:', error);
+    return;
+  }
 
-  if (error) return console.error('Load error:', error);
-  data.forEach(msg => appendMessage({ 
-    ...msg, 
-    senderEmail: msg.profiles.email 
-  }));
+  const list = document.getElementById('message-list');
+  list.innerHTML = '';
+  data.forEach(msg => {
+    appendMessage({
+      ...msg,
+      senderEmail   : msg.sender?.email,
+      recipientEmail: msg.recipient?.email
+    });
+  });
   scrollToBottom();
 }
+
 
 // ─── REAL-TIME SUBSCRIBE ────────────────────────────────────
 function subscribe() {

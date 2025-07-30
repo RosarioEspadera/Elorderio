@@ -38,8 +38,8 @@ async function loadMessages() {
     sender:profiles!messages_user_id_fkey(id,email)
   `)
   .or(`
-    and(user_id.eq.${me},to_user_id.eq.${ADMIN_ID}),
-    and(user_id.eq.${ADMIN_ID},to_user_id.eq.${me})
+    and(user_id.eq.${me},to_user_id.neq.${me}),
+    and(user_id.neq.${me},to_user_id.eq.${me})
   `)
   .order('created_at', { ascending: true });
 

@@ -50,11 +50,12 @@ async function loadMessages() {
 
   const { data, error } = await supabase
   .from('messages')
- .select(`
+.select(`
   *,
   sender:profiles!messages_user_id_fkey(id,email),
   recipient:profiles!messages_to_user_id_fkey(id,email)
 `)
+
 
   .or(filter)
   .order('created_at', { ascending: true });

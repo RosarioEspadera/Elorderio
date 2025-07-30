@@ -46,6 +46,12 @@
     <p>Cart</p>
   </a>
 </nav>
+<script type="module">
+  import { uploadAvatar, logout } from './profile.js';
+
+  document.getElementById('upload-button')?.addEventListener('click', uploadAvatar);
+  document.getElementById('logout-button')?.addEventListener('click', logout);
+</script>
 
 </body>
 </html>

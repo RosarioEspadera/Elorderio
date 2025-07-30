@@ -23,14 +23,15 @@ window.addEventListener('DOMContentLoaded', async () => {
   document.querySelector('.chat-header h2').textContent = '📥 Admin Inbox';
   document.querySelector('.chat-header p').textContent  = 'Select a customer to view the chat';
 
-  const { data, error } = await supabase
-    .from('messages')
-    .select(`
-      user_id, content, created_at,
-      sender:profiles!messages_user_id_fkey(email, avatar_url)
-    `)
-    .eq('to_user_id', me)
-    .order('created_at', { ascending: false });
+ const { data, error } = await supabase
+  .from('messages')
+  .select(`
+    id, content, created_at, user_id, to_user_id,
+    sender:profiles!messages_user_id_fkey(email, avatar_url)
+  `)
+  .or(`user_id.eq.${adminId},to_user_id.eq.${adminId}`)
+  .order('created_at', { ascending: false });
+
 
   if (error) return console.error('Admin inbox error:', error);
 

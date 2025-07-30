@@ -4,8 +4,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 const ADMIN_ID = '081ee8b0-334c-4446-a8f0-bccfba864f6c';
 const SUPABASE_URL = 'https://bcmibfnrydyzomootwcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I';
+let supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 let sessionUser;
 let chatChannel;
 
@@ -24,6 +24,13 @@ async function init() {
 
   sessionUser = session.user;
 
+  // Reinitialize Supabase with authenticated headers 🔐
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+    global: {
+      headers: { Authorization: `Bearer ${session.access_token}` }
+    }
+  });
+
   try {
     await Promise.all([
       ensureProfileExists(sessionUser.id, sessionUser.user_metadata),
@@ -40,7 +47,6 @@ async function init() {
   }
 }
 
-
 async function ensureProfileExists(userId, metadata) {
   const { data, error } = await supabase
     .from('profiles')
@@ -48,11 +54,13 @@ async function ensureProfileExists(userId, metadata) {
     .eq('id', userId);
 
   if (!data || data.length === 0) {
-    await supabase.from('profiles').upsert([{
-      id: userId,
-      email: metadata?.email || '',
-      avatar_url: metadata?.avatar_url || `https://robohash.org/${userId}`
-    }]);
+    await supabase
+      .from('profiles')
+      .upsert([{
+        id: userId,
+        email: metadata?.email || '',
+        avatar_url: metadata?.avatar_url || `https://robohash.org/${userId}`
+      }]);
     console.log('✅ Created new profile for', userId);
   }
 }

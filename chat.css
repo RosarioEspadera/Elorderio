@@ -1,0 +1,95 @@
+/* ───── Chat Base Styles ───────────────────────────────── */
+
+:root {
+  --bg: #FEF3C7;         /* amber-50 */
+  --header-bg: #FBBF24;  /* amber-400 */
+  --msg-you: #DCFCE7;    /* green-50 */
+  --msg-them: #FFF7ED;   /* amber-100 */
+  --text: #1F2937;       /* gray-900 */
+  --radius: 0.75rem;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.chat-header {
+  background: var(--header-bg);
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.message {
+  max-width: 70%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  word-wrap: break-word;
+}
+
+.message.you {
+  align-self: flex-end;
+  background: var(--msg-you);
+}
+
+.message.them {
+  align-self: flex-start;
+  background: var(--msg-them);
+}
+
+.message small {
+  display: block;
+  font-size: 0.7rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+/* ───── Input Form ────────────────────────────────────────── */
+
+.message-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.message-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: var(--radius);
+  font-size: 1rem;
+}
+
+.message-form button {
+  padding: 0.75rem 1rem;
+  background: #F59E0B;
+  border: none;
+  border-radius: var(--radius);
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.message-form button:hover {
+  background: #D97706;
+}

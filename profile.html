@@ -22,7 +22,8 @@
       <div class="avatar-section">
         <img id="avatar-preview" src="default.png" alt="Profile Picture" class="avatar-img" />
         <label for="avatar-upload" class="avatar-label">Choose a photo:</label>
-        <input type="file" id="avatar-upload" accept="image/*" class="avatar-input" />
+       <input type="file" id="avatarInput" accept="image/*" onchange="uploadAvatar(event)" />
+
        <button id="upload-button" class="upload-btn">Upload Photo</button>
       </div>
 

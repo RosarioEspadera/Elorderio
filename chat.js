@@ -52,8 +52,8 @@ async function loadMessages() {
   .from('messages')
  .select(`
   *,
-  sender:profiles!messages_user_id_fkey(email),
-  recipient:profiles!messages_to_user_id_fkey(email)
+  sender:profiles!messages_user_id_fkey(id,email),
+  recipient:profiles!messages_to_user_id_fkey(id,email)
 `)
 
   .or(filter)

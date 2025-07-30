@@ -57,6 +57,7 @@ async function loadMessages() {
 `)
 
 
+
   .or(filter)
   .order('created_at', { ascending: true });
 
@@ -117,13 +118,12 @@ async function sendMessage(e) {
   const content = input.value.trim();
   if (!content) return;
 
-  const { error } = await supabase
-    .from('messages')
-    .insert([{
-      user_id: sessionUser.id,
-      to_user_id: otherUserId,
-      content
-    }]);
+await supabase.from("messages").insert({
+  content: messageText,
+  user_id: sessionUser.id,           // sender
+  to_user_id: otherUserId           // recipient
+});
+
 
   if (error) console.error('Send error:', error);
   input.value = '';

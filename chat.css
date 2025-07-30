@@ -132,12 +132,44 @@ body {
 .message.them {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+  gap: 0.8rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.6rem;
+  background-color: #f8f8ff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background 0.3s ease, transform 0.2s ease;
   text-decoration: none;
   color: inherit;
 }
+
+.message.them:hover {
+  background-color: #eef;
+  transform: scale(1.01);
+}
+
+.message.them .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px #ddd;
+}
+
+.message.them strong {
+  font-size: 1rem;
+  color: #333;
+}
+
+.message.them small {
+  font-size: 0.9rem;
+  color: #666;
+  display: block;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 .avatar {
   width: 42px;

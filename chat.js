@@ -97,14 +97,79 @@ async function sendMessage(e) {
 }
 
 // ─── UI HELPERS ─────────────────────────────────────────────
+// ─── 1. Update appendMessage to stash metadata & bind click ───
 function appendMessage(msg) {
-  const el = document.createElement('div');
-  el.className = `message ${msg.user_id === sessionUser.id ? 'you' : 'them'}`;
-  el.innerHTML = `
+  const isSelf = msg.user_id === sessionUser.id;
+  const wrapper = document.createElement('div');
+  wrapper.className = `message ${isSelf ? 'you' : 'them'}`;
+
+  // attach data attributes
+  wrapper.dataset.userId = msg.user_id;
+  // if you fetched email via a profiles join, you’ll have msg.senderEmail
+  wrapper.dataset.email  = msg.senderEmail || '';
+
+  wrapper.innerHTML = `
     ${sanitize(msg.content)}
     <small>${new Date(msg.inserted_at).toLocaleTimeString()}</small>
   `;
-  document.getElementById('message-list').append(el);
+
+  // bind our click handler
+  wrapper.addEventListener('click', handleMessageClick);
+
+  document.getElementById('message-list').append(wrapper);
+}
+
+// ─── 2. The click handler ─────────────────────────────────────
+function handleMessageClick(e) {
+  const el      = e.currentTarget;
+  const userId  = el.dataset.userId;
+  const email   = el.dataset.email;
+
+  // simple alert or console—swap in your own UI/modal
+  alert(
+    `Reply to:\n` +
+    `User ID: ${userId}\n` +
+    (email ? `Email: ${email}` : `No email on record`)
+  );
+
+  // you could also call a function to open a reply pane:
+  // openReplyModal({ userId, email });
+}
+
+// ─── 3. (Optional) A basic reply modal stub ────────────────
+function openReplyModal({ userId, email }) {
+  // find or create a modal element in your DOM
+  let modal = document.getElementById('reply-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'reply-modal';
+    modal.innerHTML = `
+      <div class="modal-backdrop"></div>
+      <div class="modal-dialog">
+        <h2>Reply to ${email || userId}</h2>
+        <textarea id="reply-content" rows="4"></textarea>
+        <button id="send-reply">Send</button>
+        <button id="close-reply">Cancel</button>
+      </div>
+    `;
+    document.body.append(modal);
+
+    // wire up close & send
+    modal.querySelector('#close-reply')
+      .addEventListener('click', () => modal.remove());
+    modal.querySelector('#send-reply')
+      .addEventListener('click', async () => {
+        const content = modal.querySelector('#reply-content').value.trim();
+        if (!content) return;
+        await supabase.from('messages').insert([{
+          user_id: sessionUser.id,
+          to_user_id: userId,
+          content
+        }]);
+        modal.remove();
+      });
+  }
+  modal.style.display = 'block';
 }
 
 function scrollToBottom() {

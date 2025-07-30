@@ -5,50 +5,45 @@ const SUPABASE_URL = 'https://bcmibfnrydyzomootwcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I'; 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2️⃣ Cache DOM references
-const emailLabel     = document.getElementById('user-email');
-const avatarInput    = document.getElementById('avatar-upload');
-const avatarPreview  = document.getElementById('avatar-preview');
-const uploadButton   = document.getElementById('upload-button');
-const logoutButton   = document.getElementById('logout-button');
+// DOM refs
+const emailLabel    = document.getElementById('user-email');
+const avatarInput   = document.getElementById('avatar-upload');
+const avatarPreview = document.getElementById('avatar-preview');
+const uploadBtn     = document.getElementById('upload-button');
+const logoutBtn     = document.getElementById('logout-button');
 
-// 3️⃣ Boot sequence
-document.addEventListener('DOMContentLoaded', init);
+// Bootstraps the page
+window.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-  // check session
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) return redirectToAuth();
 
-  // show user email
-  const { user } = session;
+  const user = session.user;
   emailLabel.textContent = user.email;
 
-  // load existing avatar
-  await loadUserAvatar(user.id);
+  // load existing profile (if any)
+  await loadProfile(user.id);
 
-  // wire up events
+  // wire events
   avatarInput.addEventListener('change',  uploadAvatar);
-  uploadButton.addEventListener('click', uploadAvatar);
-  logoutButton.addEventListener('click', logout);
+  uploadBtn.addEventListener('click',    uploadAvatar);
+  logoutBtn.addEventListener('click',    logout);
 }
 
-// 4️⃣ Redirect helper
 function redirectToAuth() {
   window.location.href = 'auth.html';
 }
 
-// 5️⃣ Fetch & display avatar
-async function loadUserAvatar(userId) {
+async function loadProfile(userId) {
   const { data, error } = await supabase
     .from('profiles')
     .select('avatar_url')
     .eq('user_id', userId)
-    .limit(1)
     .maybeSingle();
 
   if (error) {
-    console.error('Avatar fetch failed:', error);
+    console.error('Failed to load profile:', error.message);
     return;
   }
   if (data?.avatar_url) {
@@ -56,30 +51,26 @@ async function loadUserAvatar(userId) {
   }
 }
 
-// 6️⃣ Upload handler (for both “change” and “click”)
 export async function uploadAvatar() {
-  // 6.1 grab file from input
   const file = avatarInput.files[0];
-  if (!file) {
-    return alert('Please choose a photo.');
-  }
+  if (!file) return alert('Please choose a photo to upload.');
 
-  // 6.2 retrieve current user
+  // get current user
   const { data: { user }, error: userErr } = await supabase.auth.getUser();
   if (userErr || !user) {
-    console.error('getUser error:', userErr);
-    return alert('User not authenticated.');
+    console.error('No user:', userErr);
+    return alert('You must be logged in to update your avatar.');
   }
 
-  // 6.3 build a stable filename
+  // build filename
   const ext      = file.name.split('.').pop();
-  const fileName = `${user.id}.${ext}`;
+  const storagePath = `${user.id}.${ext}`;
 
-  // 6.4 upload to Supabase Storage (avatars bucket)
+  // 1) upload to storage
   const { error: uploadErr } = await supabase
     .storage
     .from('avatars')
-    .upload(fileName, file, {
+    .upload(storagePath, file, {
       upsert: true,
       contentType: file.type,
       cacheControl: '3600'
@@ -90,40 +81,41 @@ export async function uploadAvatar() {
     return alert(`Upload failed: ${uploadErr.message}`);
   }
 
-  // 6.5 get the public URL for that file
+  // 2) get a public URL
   const { data: urlData, error: urlErr } = supabase
     .storage
     .from('avatars')
-    .getPublicUrl(fileName);
+    .getPublicUrl(storagePath);
 
-  if (urlErr) {
-    console.error('getPublicUrl error:', urlErr);
-    return alert(`Could not retrieve avatar URL: ${urlErr.message}`);
+  if (urlErr || !urlData?.publicUrl) {
+    console.error('Public URL error:', urlErr);
+    return alert(`Could not get URL: ${urlErr?.message}`);
   }
   const publicUrl = urlData.publicUrl;
 
-  // 6.6 persist the URL in your profiles table
+  // 3) upsert into profiles table
   const { error: dbErr } = await supabase
     .from('profiles')
-    .update({ avatar_url: publicUrl })
-    .eq('user_id', user.id);
+    .upsert(
+      { user_id: user.id, avatar_url: publicUrl },
+      { onConflict: 'user_id' }
+    );
 
   if (dbErr) {
-    console.error('DB update failed:', dbErr);
-    return alert(`Saving avatar URL failed: ${dbErr.message}`);
+    console.error('DB upsert error:', dbErr);
+    return alert(`Could not save avatar: ${dbErr.message}`);
   }
 
-  // 6.7 update UI
+  // 4) refresh preview
   avatarPreview.src = publicUrl;
   alert('Avatar updated! 🎉');
 }
 
-// 7️⃣ Logout
 export async function logout() {
   const { error } = await supabase.auth.signOut();
   if (error) {
-    console.error('Sign-out error:', error);
-    return alert('Failed to logout. Try again.');
+    console.error('Logout failed:', error);
+    return alert('Logout failed. Try again.');
   }
   redirectToAuth();
 }

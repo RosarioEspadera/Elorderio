@@ -13,15 +13,19 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
-
+<p class="mt-4">
+      Don’t have an account? 
+      <a href="#" id="show-signup" class="text-amber-600 hover:underline">Create one</a>
+    </p>
+    
     <hr style="margin: 2rem 0;" />
-
+<div id="signup-section" class="hidden">
     <h2>Sign Up</h2>
     <input type="email" id="signup-email" placeholder="Email" />
     <input type="password" id="signup-password" placeholder="Password" />
    <button onclick="signUp()">Create Account</button>
   </div>
-
+  </div>
   <script type="module" src="auth.js"></script>
 </body>
 </html>

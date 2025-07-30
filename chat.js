@@ -31,17 +31,17 @@ async function init() {
 // ─── LOAD HISTORY ─────────────────────────────────────────────
 async function loadMessages() {
   const me = sessionUser.id;
-  const filter = `and(user_id.eq.${me},to_user_id.eq.${ADMIN_ID}),` +
-                 `and(user_id.eq.${ADMIN_ID},to_user_id.eq.${me})`;
-
-  const { data, error } = await supabase
-    .from('messages')
-    .select(`
-      *,
-      sender:profiles!messages_user_id_fkey(id,email)
-    `)
-    .or(filter)
-    .order('created_at', { ascending: true });
+ const { data, error } = await supabase
+  .from('messages')
+  .select(`
+    *,
+    sender:profiles!messages_user_id_fkey(id,email)
+  `)
+  .or(`
+    and(user_id.eq.${me},to_user_id.eq.${ADMIN_ID}),
+    and(user_id.eq.${ADMIN_ID},to_user_id.eq.${me})
+  `)
+  .order('created_at', { ascending: true });
 
   if (error) return console.error('Load error:', error);
 

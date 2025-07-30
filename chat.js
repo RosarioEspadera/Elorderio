@@ -49,14 +49,15 @@ async function loadMessages() {
   console.log('Supabase filter:', filter);
 
   const { data, error } = await supabase
-    .from('messages')
-    .select(`
-      *,
-      sender:profiles!messages_user_id_fkey(email),
-      recipient:profiles!messages_to_user_id_fkey(email)
-    `)
-    .or(filter)
-    .order('created_at', { ascending: true });
+  .from('messages')
+  .select(`
+    *,
+    sender:profiles(id,email),
+    recipient:profiles(id,email)
+  `)
+  .or(filter)
+  .order('created_at', { ascending: true });
+
 
   if (error) {
     console.error('Load error:', error);

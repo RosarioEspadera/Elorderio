@@ -139,7 +139,7 @@ function appendMessage(msg) {
   
   // attach metadata
   el.dataset.userId = msg.user_id;
-  el.dataset.email  = msg.senderEmail || '';
+  el.dataset.email = msg.senderEmail || "Unknown sender";
   el.dataset.id     = msg.id;            // <-- new
 
   el.innerHTML = `
@@ -164,7 +164,7 @@ function handleMessageClick(e) {
 // 3) The reply modal now knows which message to reply to
 function openReplyModal({ userId, email, replyToId }) {
   const modal = document.getElementById('reply-modal');
-  document.getElementById('reply-title').textContent = `Reply to ${email || userId}`;
+  document.getElementById('reply-title').textContent =`Reply to ${email ? sanitize(email) : userId.slice(0, 8)}…`;
   modal.style.display = 'flex';
 
   // wire close button

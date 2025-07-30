@@ -6,53 +6,39 @@ const SUPABASE_URL = 'https://bcmibfnrydyzomootwcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Who are we chatting *with*?
-// customer opens: chat.html?with=<ADMIN_USER_ID>
-const urlParams  = new URLSearchParams(window.location.search);
-const otherUserId = urlParams.get('with');
-if (!otherUserId) {
-  alert('Chat target not specified.');
-  throw new Error('Missing "with" query parameter');
-}
-
+// 2) STATE
 let sessionUser;
 let otherUserId;
 let chatChannel;
 
+// 3) LIFECYCLE
 window.addEventListener('DOMContentLoaded', init);
 window.addEventListener('beforeunload', () => {
   if (chatChannel) supabase.removeChannel(chatChannel);
 });
 
+// 4) BOOTSTRAP
 async function init() {
-  // 1) Auth check
+  // a) Ensure logged in
   const {
     data: { session }
   } = await supabase.auth.getSession();
-
-  if (!session) {
-    return window.location.replace('auth.html');
-  }
-
+  if (!session) return window.location.replace('auth.html');
   sessionUser = session.user;
 
-  // 2) Figure out who we're chatting WITH
-  const urlParams = new URLSearchParams(window.location.search);
-  // if ?with= is present, use it; otherwise assume customer → admin
-  otherUserId = urlParams.get('with') || ADMIN_ID;
+  // b) Determine chat partner: ?with=USER_ID or fallback to admin
+  const urlParams   = new URLSearchParams(window.location.search);
+  otherUserId       = urlParams.get('with') || ADMIN_ID;
 
-  // 3) Load past messages in this 1-to-1 convo
+  // c) Fetch history, listen for new messages, wire form
   await loadMessages();
-
-  // 4) Subscribe for new ones
   subscribe();
-
-  // 5) Wire up the send form
   document
     .getElementById('message-form')
     .addEventListener('submit', sendMessage);
 }
 
+// 5) DATA LAYER
 async function loadMessages() {
   const filter = `or(
     and(user_id.eq.${sessionUser.id},to_user_id.eq.${otherUserId}),
@@ -72,7 +58,7 @@ async function loadMessages() {
 
 function subscribe() {
   chatChannel = supabase
-    .channel(`private-chat-${sessionUser.id}-${otherUserId}`)
+    .channel(`chat-${sessionUser.id}-${otherUserId}`)
     .on(
       'postgres_changes',
       {
@@ -82,12 +68,10 @@ function subscribe() {
         filter: `or(user_id.eq.${sessionUser.id},to_user_id.eq.${sessionUser.id})`
       },
       ({ new: msg }) => {
-        // only show messages in this conversation
-        const inConvo =
-          (msg.user_id === sessionUser.id && msg.to_user_id === otherUserId) ||
-          (msg.user_id === otherUserId && msg.to_user_id === sessionUser.id);
-
-        if (inConvo) {
+        // Only show if it belongs to this 1-to-1 convo
+        const isMyMsg   = msg.user_id    === sessionUser.id && msg.to_user_id === otherUserId;
+        const isTheirMsg= msg.user_id    === otherUserId    && msg.to_user_id === sessionUser.id;
+        if (isMyMsg || isTheirMsg) {
           appendMessage(msg);
           scrollToBottom();
         }
@@ -100,14 +84,14 @@ function subscribe() {
 
 async function sendMessage(e) {
   e.preventDefault();
-  const input = document.getElementById('message-input');
+  const input   = document.getElementById('message-input');
   const content = input.value.trim();
   if (!content) return;
 
   const { error } = await supabase.from('messages').insert([
     {
-      user_id: sessionUser.id,
-      to_user_id: otherUserId,
+      user_id     : sessionUser.id,
+      to_user_id  : otherUserId,
       content
     }
   ]);
@@ -116,11 +100,11 @@ async function sendMessage(e) {
   input.value = '';
 }
 
+// 6) UI HELPERS
 function appendMessage(msg) {
-  const el = document.createElement('div');
-  el.className = `message ${
-    msg.user_id === sessionUser.id ? 'you' : 'them'
-  }`;
+  const isMine = msg.user_id === sessionUser.id;
+  const el     = document.createElement('div');
+  el.className = `message ${isMine ? 'you' : 'them'}`;
   el.innerHTML = `
     ${sanitize(msg.content)}
     <small>${new Date(msg.inserted_at).toLocaleTimeString()}</small>

@@ -120,9 +120,9 @@ async function sendMessage(e) {
   if (!content) return;
 
 await supabase.from("messages").insert({
-  content: messageText,
-  user_id: sessionUser.id,           // sender
-  to_user_id: otherUserId           // recipient
+  content: content,
+  user_id: sessionUser.id,
+  to_user_id: otherUserId
 });
 
 

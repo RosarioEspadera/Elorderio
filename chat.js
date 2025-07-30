@@ -21,7 +21,18 @@ async function init() {
   if (!session) return window.location.replace('auth.html');
   sessionUser = session.user;
 
-  
+  async function ensureProfileExists(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', userId);
+
+  if (!data || data.length === 0) {
+    await supabase.from('profiles').upsert([{ id: userId }]);
+    console.log('Inserted new profile for', userId);
+  }
+}
+
   // 👇 NEW: Ensure profile exists
   const { data: { user } } = await supabase.auth.getUser();
   await supabase.from('profiles').upsert({  // safer than insert

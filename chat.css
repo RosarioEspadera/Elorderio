@@ -129,6 +129,33 @@ body {
 .tab-link:hover {
   color: #50a2e6;
 }
+.message.them {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  text-decoration: none;
+  color: inherit;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.badge {
+  background-color: gold;
+  color: black;
+  font-size: 0.7em;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-left: auto;
+  align-self: start;
+}
+
 
 /* ─── Animations ────────────────────────── */
 @keyframes fadeIn {

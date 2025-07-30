@@ -1,0 +1,119 @@
+/* style.css */
+
+/* ─── Root Variables ───────────────────────────────────────────────────────── */
+:root {
+  --bg-color: #FEF3C7;        /* amber-50 */
+  --card-bg: #FFFFFF;
+  --text-color: #1F2937;      /* gray-900 */
+  --input-bg: #F9FAFB;        /* gray-50 */
+  --input-border: #D1D5DB;    /* gray-300 */
+  --button-bg: #F59E0B;       /* amber-500 */
+  --button-hover: #D97706;    /* amber-600 */
+  --hr-color: #E5E7EB;        /* gray-200 */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --radius: 0.5rem;           /* 8px */
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* ─── Global Styles ────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* ─── Login Wrapper ───────────────────────────────────────────────────────── */
+.login-wrapper {
+  max-width: 360px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+/* ─── Headings ────────────────────────────────────────────────────────────── */
+.login-wrapper h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-color);
+}
+
+/* ─── Inputs ──────────────────────────────────────────────────────────────── */
+.login-wrapper input[type="email"],
+.login-wrapper input[type="password"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  background-color: var(--input-bg);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-wrapper input[type="email"]:focus,
+.login-wrapper input[type="password"]:focus {
+  outline: none;
+  border-color: var(--button-bg);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────────────── */
+.login-wrapper button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  border: none;
+  border-radius: var(--radius);
+  background-color: var(--button-bg);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.login-wrapper button:hover {
+  background-color: var(--button-hover);
+}
+
+.login-wrapper button:active {
+  transform: scale(0.98);
+}
+
+/* ─── Separator ──────────────────────────────────────────────────────────── */
+.login-wrapper hr {
+  border: none;
+  border-top: 1px solid var(--hr-color);
+  margin: 2rem 0;
+}
+
+/* ─── Utility Classes ─────────────────────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .login-wrapper {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  .login-wrapper h2 {
+    font-size: 1.5rem;
+  }
+}
+```

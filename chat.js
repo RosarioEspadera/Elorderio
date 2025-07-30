@@ -29,20 +29,21 @@ async function init() {
 }
 
 async function ensureProfileExists(userId, metadata) {
-  const { data, error } = await supabase.from('profiles').select('id').eq('id', userId);
-  if (error) return console.error('Profile check error:', error);
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', userId);
 
   if (!data || data.length === 0) {
-    const { error: insertError } = await supabase.from('profiles').upsert([{
-  id: user.id,
-  email: user.email,
-  avatar_url: user.user_metadata.avatar_url
-}]);
-
-    if (insertError) console.error('Profile insert error:', insertError);
-    else console.log(`✅ Profile created for ${userId}`);
+    await supabase.from('profiles').upsert([{
+      id: userId,
+      email: metadata?.email || '',
+      avatar_url: metadata?.avatar_url || `https://robohash.org/${userId}`
+    }]);
+    console.log('✅ Created new profile for', userId);
   }
 }
+
 
 async function loadMessages() {
   const me = sessionUser.id;

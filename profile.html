@@ -5,54 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Curio Profile</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Only load our module; Supabase client is imported inside profile.js -->
   <script type="module" src="profile.js"></script>
 </head>
+
 <body class="bg-amber-50 text-gray-900 font-sans p-6">
 
   <header class="text-center p-6 bg-yellow-100 rounded shadow">
     <h1 class="text-3xl font-bold text-amber-800">Curio Profile</h1>
-    <p class="text-lg text-gray-600">Your dish gallery starts with your identity 🍳</p>
+    <p class="text-lg text-gray-600">
+      Your dish gallery starts with your identity 🍳
+    </p>
   </header>
 
   <main>
     <div class="profile-wrapper">
-      <h2 class="greeting">Welcome, <span id="user-email">Loading...</span></h2>
+
+      <h2 class="greeting">
+        Welcome, <span id="user-email">Loading...</span>
+      </h2>
 
       <div class="avatar-section">
-        <img id="avatar-preview" src="default.png" alt="Profile Picture" class="avatar-img" />
-        <label for="avatar-upload" class="avatar-label">Choose a photo:</label>
-       <input type="file" id="avatarInput" accept="image/*" onchange="uploadAvatar(event)" />
+        <img
+          id="avatar-preview"
+          src="default.png"
+          alt="Profile Picture"
+          class="avatar-img"
+        />
 
-       <button id="upload-button" class="upload-btn">Upload Photo</button>
+        <label for="avatar-upload" class="avatar-label">
+          Choose a photo:
+        </label>
+        <input
+          type="file"
+          id="avatar-upload"
+          accept="image/*"
+          class="mt-2"
+        />
+
+        <button id="upload-button" class="upload-btn mt-4">
+          Upload Photo
+        </button>
       </div>
 
-      <div class="profile-info">
-        <p class="info-note">Your profile photo will be stored securely and visible on your account page.</p>
-       <button id="logout-button" class="logout-btn">Logout</button>
+      <div class="profile-info mt-6">
+        <p class="info-note">
+          Your profile photo will be stored securely and visible on your account page.
+        </p>
+        <button id="logout-button" class="logout-btn mt-4">
+          Logout
+        </button>
       </div>
+
     </div>
   </main>
-<nav class="bottom-tab">
-  <a href="index.html" class="tab-link">
-    <span>🍽️</span>
-    <p>Menu</p>
-  </a>
-  <a href="profile.html" class="tab-link">
-    <span>👤</span>
-    <p>Profile</p>
-  </a>
-  <a href="#" class="tab-link">
-    <span>🧺</span>
-    <p>Cart</p>
-  </a>
-</nav>
-<script type="module">
-  import { uploadAvatar, logout } from './profile.js';
 
-  document.getElementById('upload-button')?.addEventListener('click', uploadAvatar);
-  document.getElementById('logout-button')?.addEventListener('click', logout);
-</script>
+  <nav class="bottom-tab">
+    <a href="index.html" class="tab-link">
+      <span>🍽️</span><p>Menu</p>
+    </a>
+    <a href="profile.html" class="tab-link">
+      <span>👤</span><p>Profile</p>
+    </a>
+    <a href="#" class="tab-link">
+      <span>🧺</span><p>Cart</p>
+    </a>
+  </nav>
 
 </body>
 </html>
+

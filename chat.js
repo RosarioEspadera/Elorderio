@@ -27,7 +27,8 @@ async function init() {
 
   // 2) Determine chat partner
   const params      = new URLSearchParams(location.search);
-  otherUserId       = params.get('with') || ADMIN_ID;
+  const otherUserId = ADMIN_ID;
+
 
   // 3) Load history, subscribe, bind form
   await loadMessages();

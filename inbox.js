@@ -26,7 +26,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   const { data, error } = await supabase
     .from('messages')
     .select(`
-      user_id, text, created_at,
+      user_id, content, created_at,
       sender:profiles!messages_user_id_fkey(email, avatar_url)
     `)
     .eq('to_user_id', me)
@@ -45,7 +45,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     const profile = msg.sender;
     const email   = profile?.email || 'Unknown';
     const avatar  = profile?.avatar_url || 'default-avatar.png';
-    const preview = msg.text?.slice(0, 40) || '…';
+   const preview = msg.content?.slice(0, 40) || '…';
+
 
     const card = document.createElement('a');
     card.className = 'message them';

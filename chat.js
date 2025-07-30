@@ -40,14 +40,17 @@ async function init() {
 async function loadMessages() {
   const me     = sessionUser.id;
   const them   = otherUserId;
-  const filter = `or(and(user_id.eq.${me},to_user_id.eq.${them}),` +
-                 `and(user_id.eq.${them},to_user_id.eq.${me}))`;
+  const filter = `(
+  and(user_id.eq.${me},to_user_id.eq.${them}),
+  and(user_id.eq.${them},to_user_id.eq.${me})
+)`;
 
-  const { data, error } = await supabase
-    .from('messages')
-    .select('*, profiles(email)')
-    .or(filter)
-    .order('created_at', { ascending: true });
+const { data, error } = await supabase
+  .from('messages')
+  .select('*, profiles(email)')
+  .or(filter)
+  .order('created_at', { ascending: true });
+
 
   if (error) return console.error('Load error:', error);
   data.forEach(msg => appendMessage({ 

@@ -21,6 +21,15 @@ async function init() {
   if (!session) return window.location.replace('auth.html');
   sessionUser = session.user;
 
+  
+  // 👇 NEW: Ensure profile exists
+  const { data: { user } } = await supabase.auth.getUser();
+  await supabase.from('profiles').upsert({  // safer than insert
+    id: user.id,
+    email: user.email,
+    avatar_url: user.user_metadata.avatar_url
+  });
+  
   await loadMessages();
   subscribeToMessages();
 

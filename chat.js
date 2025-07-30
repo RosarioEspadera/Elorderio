@@ -110,54 +110,74 @@ async function sendMessage(e) {
 }
 
 // ─── APPEND + CLICK HANDLER ─────────────────────────────────
+// 1) In appendMessage, also attach the message’s own id
 function appendMessage(msg) {
-  const me     = sessionUser.id;
+  const me = sessionUser.id;
   const isMine = msg.user_id === me;
-  const el     = document.createElement('div');
-
+  const el = document.createElement('div');
   el.className = `message ${isMine ? 'you' : 'them'}`;
-  el.dataset.userId  = msg.user_id;
-  el.dataset.email   = msg.senderEmail || '';
+  
+  // attach metadata
+  el.dataset.userId = msg.user_id;
+  el.dataset.email  = msg.senderEmail || '';
+  el.dataset.id     = msg.id;            // <-- new
+
   el.innerHTML = `
     <strong>${isMine ? 'You' : msg.senderEmail}</strong><br/>
     ${sanitize(msg.content)}
     <small>${new Date(msg.created_at).toLocaleTimeString()}</small>
   `;
-
   el.addEventListener('click', handleMessageClick);
   document.getElementById('message-list').append(el);
 }
 
-// ─── MESSAGE CLICK & REPLY MODAL ───────────────────────────
+// 2) When you click, grab the reply_to id and open the modal
 function handleMessageClick(e) {
-  const el     = e.currentTarget;
-  const userId = el.dataset.userId;
-  const email  = el.dataset.email;
-  openReplyModal({ userId, email });
+  const el        = e.currentTarget;
+  const userId    = el.dataset.userId;
+  const email     = el.dataset.email;
+  const replyToId = el.dataset.id;        // <-- new
+
+  openReplyModal({ userId, email, replyToId });
 }
 
-function openReplyModal({ userId, email }) {
-  const modal   = document.getElementById('reply-modal');
-  document.getElementById('reply-title').textContent =
-    `Reply to ${email || userId}`;
+// 3) The reply modal now knows which message to reply to
+function openReplyModal({ userId, email, replyToId }) {
+  const modal = document.getElementById('reply-modal');
+  document.getElementById('reply-title').textContent = `Reply to ${email || userId}`;
   modal.style.display = 'flex';
 
-  modal.querySelector('#close-reply').onclick = () => {
-    modal.style.display = 'none';
-  };
+  // wire close button
+  modal.querySelector('#close-reply').onclick = closeReplyModal;
 
-  modal.querySelector('#send-reply').onclick = async () => {
+  // wire send button
+  const sendBtn = modal.querySelector('#send-reply');
+  sendBtn.dataset.replyTo = replyToId;     // stash the parent ID
+  sendBtn.onclick = async (e) => {
     const content = document.getElementById('reply-content').value.trim();
     if (!content) return;
-    await supabase.from('messages').insert([{
-      user_id    : sessionUser.id,
-      to_user_id : userId,
-      content
-    }]);
-    modal.style.display = 'none';
-    document.getElementById('reply-content').value = '';
+
+    const { error } = await supabase
+      .from('messages')
+      .insert([{
+        user_id:    sessionUser.id,
+        to_user_id: userId,
+        content,
+        reply_to:   e.currentTarget.dataset.replyTo
+      }]);
+
+    if (error) console.error('Reply failed:', error);
+    closeReplyModal();
   };
 }
+
+// 4) Helper to reset and hide the modal
+function closeReplyModal() {
+  const modal = document.getElementById('reply-modal');
+  modal.style.display = 'none';
+  document.getElementById('reply-content').value = '';
+}
+
 
 // ─── UTILS ───────────────────────────────────────────────────
 function scrollToBottom() {

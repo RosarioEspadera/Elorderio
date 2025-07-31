@@ -135,9 +135,6 @@ async function login(email, password) {
 }
 
 const welcomeEl = document.getElementById('welcome');
-if (welcomeEl) {
-  welcomeEl.innerText = `Welcome back, ${data.session.user.email}`;
-}
 
 // 👤 Check Auth on `profile.html`
 supabase.auth.getSession().then(({ data }) => {

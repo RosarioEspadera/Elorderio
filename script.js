@@ -2,7 +2,38 @@ const dishMenu = document.getElementById("dish-menu");
 const form = document.getElementById("order-form");
 const cartTable = document.getElementById("cart-table").querySelector("tbody");
 const cartTotal = document.getElementById("cart-total");
+const allCards = document.querySelectorAll(".dish-card");
 emailjs.init("AqvkFhQnxowOJda9J");
+
+const tagMap = {};
+
+allCards.forEach(card => {
+  const tags = [...card.querySelectorAll(".tag")].map(tag => tag.textContent.trim());
+  tags.forEach(tag => {
+    if (!tagMap[tag]) tagMap[tag] = [];
+    tagMap[tag].push(card);
+  });
+});
+
+Object.keys(tagMap).forEach(tag => {
+  const btn = document.createElement("button");
+  btn.textContent = tag;
+  btn.setAttribute("data-tag", tag);
+  document.querySelector(".tag-filters").appendChild(btn);
+});
+
+document.querySelector(".tag-filters").addEventListener("click", e => {
+  if (e.target.tagName !== "BUTTON") return;
+
+  const selectedTag = e.target.dataset.tag;
+  allCards.forEach(card => card.style.display = "none");
+
+  if (selectedTag === "All") {
+    allCards.forEach(card => card.style.display = "block");
+  } else {
+    tagMap[selectedTag].forEach(card => card.style.display = "block");
+  }
+});
 
 const cart = [];
 

@@ -77,24 +77,12 @@ function removeFromCart(index) {
 }
 
 // 🧾 Helper for order form
-function generateItemTableHTML() {
-  const rows = cart.map(item => `
-    <tr>
-      <td>${item.quantity} × ${item.name}</td>
-      <td align="right">₱ ${item.price * item.quantity}</td>
-    </tr>
-  `).join("");
-
-  return `
-    <table style="width:100%; border-collapse:collapse;">
-      ${rows}
-      <tr>
-        <td><strong>Total</strong></td>
-        <td align="right"><strong>₱ ${calculateTotal()}</strong></td>
-      </tr>
-    </table>
-  `;
+function generateItemListText() {
+  const lines = cart.map(item => `${item.quantity} × ${item.name} — ₱ ${item.price * item.quantity}`);
+  lines.push(`Total — ₱ ${calculateTotal()}`);
+  return lines.join("\n");
 }
+
 
 // 🧮 Total calculator
 function calculateTotal() {

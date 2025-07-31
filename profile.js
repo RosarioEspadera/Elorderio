@@ -16,8 +16,14 @@ const logoutBtn     = document.getElementById('logout-button');
 window.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return redirectToAuth();
+  const { data: session } = await supabase.auth.getSession();
+if (session) {
+  await supabase.auth.signOut();
+  window.location.href = "/auth.html"; // or wherever you redirect
+} else {
+  console.warn("No active session to log out.");
+  window.location.href = "/auth.html"; // still redirect gracefully
+}
 
   const user = session.user;
   emailLabel.textContent = user.email;

@@ -1,3 +1,7 @@
+window.addToCart = function(name, price) {
+  alert(`${name} added to cart!`);
+};
+
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
 const dishMenu = document.getElementById("dish-menu");

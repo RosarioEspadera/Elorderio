@@ -8,7 +8,7 @@ const user = await supabase.auth.getUser();
 const currentUserId = user.data.user.id;
 const adminId = '081ee8b0-334c-4446-a8f0-bccfba864f6c';
 
-async function sendChatMessage() {
+window.sendChatMessage = async function () {
   const content = document.getElementById("chat-input").value;
   const { error } = await supabase.from("messages").insert([{
     sender_id: currentUserId,
@@ -17,7 +17,8 @@ async function sendChatMessage() {
     is_admin: false
   }]);
   if (!error) document.getElementById("chat-input").value = "";
-}
+};
+
 
 async function loadMessages() {
   const { data } = await supabase

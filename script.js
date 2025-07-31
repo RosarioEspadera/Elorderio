@@ -41,13 +41,13 @@ document.querySelector(".tag-filters").addEventListener("click", e => {
 const cart = [];
 
 function addToCart(name, price) {
-  // Check if item already in cart
   const existing = cart.find(item => item.name === name);
   if (existing) {
-    existing.quantity += 1;
+    existing.quantity++; // Use consistent key: quantity
   } else {
     cart.push({ name, price, quantity: 1 });
   }
+  alert(`${name} added to order!`);
   updateCartPreview();
 }
 
@@ -55,56 +55,33 @@ function addToCart(name, price) {
 function updateCartPreview() {
   const tbody = document.querySelector("#cart-table tbody");
   const totalEl = document.getElementById("cart-total");
-
   if (!tbody || !totalEl) return;
 
-  tbody.innerHTML = cart.map(item => `
+  tbody.innerHTML = cart.map((item, index) => `
     <tr>
-      <td>${item.name} × ${item.quantity}</td>
+      <td>
+        ${item.name} × ${item.quantity}
+        <button onclick="removeFromCart(${index})" style="margin-left:8px; color:red;">✕</button>
+      </td>
       <td align="right">₱ ${item.price * item.quantity}</td>
     </tr>
   `).join("");
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = calculateTotal();
   totalEl.textContent = `₱ ${total}`;
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartPreview();
 }
 
 // 🧾 Helper for order form
 function generateItemTableHTML() {
-  return cart.map(item => `
-    <tr>
-      <td>${item.name} × ${item.quantity}</td>
-      <td align="right">₱ ${item.price * item.quantity}</td>
-    </tr>
-  `).join("");
-}
-
-function calculateTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-}
-
-function addToCart(name, price) {
-  const existing = cart.find(item => item.name === name);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ name, price, qty: 1 });
-  }
-  alert(`${name} added to order!`);
-  updateCartPreview();
-}
-
-// 🧮 Total calculator
-function calculateTotal() {
-  return cart.reduce((sum, item) => sum + item.qty * item.price, 0);
-}
-
-// 🧾 Generates full table HTML
-function generateItemTableHTML() {
   const rows = cart.map(item => `
     <tr>
-      <td>${item.qty} x ${item.name}</td>
-      <td align="right">₱${item.qty * item.price}</td>
+      <td>${item.quantity} × ${item.name}</td>
+      <td align="right">₱ ${item.price * item.quantity}</td>
     </tr>
   `).join("");
 
@@ -113,10 +90,15 @@ function generateItemTableHTML() {
       ${rows}
       <tr>
         <td><strong>Total</strong></td>
-        <td align="right"><strong>₱${calculateTotal()}</strong></td>
+        <td align="right"><strong>₱ ${calculateTotal()}</strong></td>
       </tr>
     </table>
   `;
+}
+
+// 🧮 Total calculator
+function calculateTotal() {
+  return cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 }
 
 form.addEventListener("submit", function(e) {

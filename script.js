@@ -37,32 +37,52 @@ document.querySelector(".tag-filters").addEventListener("click", e => {
   }
 });
 
+// 🛒 Cart system
 const cart = [];
 
-function renderDishes() {
-  dishMenu.innerHTML = "";
-  dishes.forEach((dish) => {
-    const card = document.createElement("div");
-    card.className = "bg-white p-4 rounded shadow hover:scale-105 transition cursor-pointer w-full sm:w-[48%] lg:w-[30%] mb-4";
-    card.innerHTML = `
-      <img src="${dish.image_url}" alt="${dish.title}" class="rounded mb-2 w-full h-40 object-cover" />
-      <h3 class="text-lg font-semibold">${dish.title}</h3>
-      <p class="text-gray-600 text-sm mb-2">${dish.story}</p>
-      <button class="bg-indigo-600 text-white px-3 py-1 rounded" onclick="addToCart('${dish.title}', ${dish.price})">Add to Order</button>
-    `;
-    dishMenu.appendChild(card);
-  });
+function addToCart(name, price) {
+  // Check if item already in cart
+  const existing = cart.find(item => item.name === name);
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ name, price, quantity: 1 });
+  }
+  updateCartPreview();
 }
+
+// 🧮 Update cart table UI
 function updateCartPreview() {
-  cartTable.innerHTML = cart.map(item => `
+  const tbody = document.querySelector("#cart-table tbody");
+  const totalEl = document.getElementById("cart-total");
+
+  if (!tbody || !totalEl) return;
+
+  tbody.innerHTML = cart.map(item => `
     <tr>
-      <td>${item.qty} x ${item.name}</td>
-      <td class="text-right">₱${item.qty * item.price}</td>
+      <td>${item.name} × ${item.quantity}</td>
+      <td align="right">₱ ${item.price * item.quantity}</td>
     </tr>
   `).join("");
 
-  cartTotal.textContent = `₱${calculateTotal()}`;
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  totalEl.textContent = `₱ ${total}`;
 }
+
+// 🧾 Helper for order form
+function generateItemTableHTML() {
+  return cart.map(item => `
+    <tr>
+      <td>${item.name} × ${item.quantity}</td>
+      <td align="right">₱ ${item.price * item.quantity}</td>
+    </tr>
+  `).join("");
+}
+
+function calculateTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
 function addToCart(name, price) {
   const existing = cart.find(item => item.name === name);
   if (existing) {

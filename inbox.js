@@ -22,10 +22,10 @@ window.sendChatMessage = async function () {
 // Fetch distinct senders who messaged admin
 const { data: senders } = await supabase
   .from("messages")
-  .select("sender_id")
+  .select("sender_id", { distinct: true })
   .eq("receiver_id", adminId)
-  .neq("sender_id", adminId)
-  .group("sender_id");
+  .neq("sender_id", adminId);
+
 
 senders.forEach(({ sender_id }) => {
   const btn = document.createElement("button");

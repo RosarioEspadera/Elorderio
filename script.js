@@ -92,7 +92,7 @@ function calculateTotal() {
 form.addEventListener("submit", function(e) {
   e.preventDefault();
 
-  this.item_list.value = generateItemTableHTML();
+  this.item_list.value = generateItemListText();
   this.total.value = `₱${calculateTotal()}`;
 
   emailjs.sendForm("service_epydqmi", "template_vzuexod", this)

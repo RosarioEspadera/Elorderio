@@ -134,10 +134,17 @@ async function login(email, password) {
   else window.location.href = 'profile.html';
 }
 
-const welcomeEl = document.getElementById('welcome');
 
 // 👤 Check Auth on `profile.html`
-supabase.auth.getSession().then(({ data }) => {
-  if (!data.session) window.location.href = 'auth.html';
-  else document.getElementById('welcome').innerText = `Welcome back, ${data.session.user.email}`;
-});
+if (window.location.pathname.includes('profile.html')) {
+  supabase.auth.getSession().then(({ data }) => {
+    if (!data.session) window.location.href = 'auth.html';
+    else {
+      const welcomeEl = document.getElementById('welcome');
+      if (welcomeEl) {
+        welcomeEl.innerText = `Welcome back, ${data.session.user.email}`;
+      }
+    }
+  });
+}
+

@@ -79,7 +79,6 @@ function removeFromCart(index) {
 // 🧾 Helper for order form
 function generateItemListText() {
   const lines = cart.map(item => `${item.quantity} × ${item.name} — ₱ ${item.price * item.quantity}`);
-  lines.push(`Total — ₱ ${calculateTotal()}`);
   return lines.join("\n");
 }
 

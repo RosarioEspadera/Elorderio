@@ -3,11 +3,10 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 // Setup
 const SUPABASE_URL = 'https://bcmibfnrydyzomootwcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I'; // Replace with secure env key
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 const user = await supabase.auth.getUser();
 const currentUserId = user.data.user.id;
 const adminId = '081ee8b0-334c-4446-a8f0-bccfba864f6c';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 async function sendChatMessage() {
   const content = document.getElementById("chat-input").value;

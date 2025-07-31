@@ -25,3 +25,16 @@
   margin: 0.5rem 0;
   border-radius: 8px;
 }
+.sender-list {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.sender-list button {
+  padding: 0.5rem 1rem;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

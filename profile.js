@@ -15,15 +15,13 @@ const logoutBtn     = document.getElementById('logout-button');
 // Bootstraps the page
 window.addEventListener('DOMContentLoaded', init);
 
-async function init() {
-  const { data: session } = await supabase.auth.getSession();
-if (session) {
-  await supabase.auth.signOut();
-  window.location.href = "/auth.html"; // or wherever you redirect
-} else {
-  console.warn("No active session to log out.");
-  window.location.href = "/auth.html"; // still redirect gracefully
+function redirectToAuth() {
+  window.location.href = 'auth.html';
 }
+
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) return redirectToAuth();
 
   const user = session.user;
   emailLabel.textContent = user.email;
@@ -35,10 +33,6 @@ if (session) {
   avatarInput.addEventListener('change',  uploadAvatar);
   uploadBtn.addEventListener('click',    uploadAvatar);
   logoutBtn.addEventListener('click',    logout);
-}
-
-function redirectToAuth() {
-  window.location.href = 'auth.html';
 }
 
 async function loadProfile(userId) {

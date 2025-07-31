@@ -1,0 +1,23 @@
+<!-- inbox.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elorderio Inbox</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="inbox-section">
+    <h2>📩 Send a Message to Rio’s Café</h2>
+   <div id="chat-window" class="chat-window">
+  <div id="chat-log"></div>
+  <textarea id="chat-input" placeholder="Type a message..."></textarea>
+  <button onclick="sendChatMessage()">Send</button>
+</div>
+  </section>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+ <script type="module" src="inbox.js"></script>
+</body>
+</html>

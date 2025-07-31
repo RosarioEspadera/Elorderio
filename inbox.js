@@ -19,6 +19,50 @@ window.sendChatMessage = async function () {
   if (!error) document.getElementById("chat-input").value = "";
 };
 
+// Fetch distinct senders who messaged admin
+const { data: senders } = await supabase
+  .from("messages")
+  .select("sender_id")
+  .eq("receiver_id", adminId)
+  .neq("sender_id", adminId)
+  .group("sender_id");
+
+senders.forEach(({ sender_id }) => {
+  const btn = document.createElement("button");
+  btn.textContent = `Reply to ${sender_id.slice(0, 6)}...`;
+  btn.onclick = () => loadConversation(sender_id);
+  document.getElementById("sender-list").appendChild(btn);
+});
+async function loadConversation(customerId) {
+  const { data: messages } = await supabase
+    .from("messages")
+    .select("*")
+    .or(`sender_id.eq.${customerId},receiver_id.eq.${customerId}`)
+    .order("timestamp", { ascending: true });
+
+  const chatLog = document.getElementById("chat-log");
+  chatLog.innerHTML = "";
+  messages.forEach(msg => {
+    const bubble = document.createElement("div");
+    bubble.className = msg.sender_id === adminId ? "admin-bubble" : "user-bubble";
+    bubble.textContent = msg.content;
+    chatLog.appendChild(bubble);
+  });
+
+  // Store selected customer for replies
+  window.selectedCustomerId = customerId;
+}
+window.sendAdminReply = async function () {
+  const content = document.getElementById("chat-input").value;
+  await supabase.from("messages").insert([{
+    sender_id: adminId,
+    receiver_id: window.selectedCustomerId,
+    content,
+    is_admin: true
+  }]);
+  document.getElementById("chat-input").value = "";
+  loadConversation(window.selectedCustomerId); // Refresh view
+};
 
 async function loadMessages() {
   const { data } = await supabase

@@ -1,7 +1,3 @@
-window.addToCart = function(name, price) {
-  alert(`${name} added to cart!`);
-};
-
 import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
 const dishMenu = document.getElementById("dish-menu");
@@ -44,7 +40,7 @@ document.querySelector(".tag-filters").addEventListener("click", e => {
 // 🛒 Cart system
 const cart = [];
 
-function addToCart(name, price) {
+window.addToCart = function(name, price) {
   const existing = cart.find(item => item.name === name);
   if (existing) {
     existing.quantity++; // Use consistent key: quantity

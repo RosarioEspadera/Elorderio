@@ -134,6 +134,11 @@ async function login(email, password) {
   else window.location.href = 'profile.html';
 }
 
+const welcomeEl = document.getElementById('welcome');
+if (welcomeEl) {
+  welcomeEl.innerText = `Welcome back, ${data.session.user.email}`;
+}
+
 // 👤 Check Auth on `profile.html`
 supabase.auth.getSession().then(({ data }) => {
   if (!data.session) window.location.href = 'auth.html';

@@ -39,10 +39,21 @@ html, body {
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
-  color: #3b3b3b;
+  padding: 1rem 0;
+  background: linear-gradient(to right, #fbbf24, #f59e0b);
+  color: #78350f;
+  border-bottom: 2px solid #fcd34d;
   margin-bottom: 1rem;
 }
+.inbox-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
 
+.inbox-header .subtitle {
+  font-size: 0.9rem;
+  color: #92400e;
+}
 /* ─────────────────────────────────────────────
    Chat Box
 ────────────────────────────────────────────── */
@@ -60,7 +71,9 @@ html, body {
    Message Bubble
 ────────────────────────────────────────────── */
 .message {
+  margin: 0.5rem 0;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
   animation: fadeInUp 0.4s ease-out;
@@ -69,6 +82,9 @@ html, body {
 .message.admin .bubble {
  background: linear-gradient(135deg, #ec4899, #f472b6); /* pink gradient */
   color: white;
+}
+.message.user {
+  align-items: flex-end;
 }
 
 .message.user .bubble {
@@ -91,18 +107,27 @@ html, body {
   margin-left: 4px;
 }
 .bubble {
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  max-width: 75%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  position: relative;
+  max-width: 70%;
+  padding: 0.6rem 1rem;
+  border-radius: 1rem;
   font-size: 0.95rem;
+  position: relative;
+  margin-bottom: 0.2rem;
   line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .bubble:hover {
   transform: scale(1.02);
+}
+.bubble::after {
+  content: attr(data-time);
+  font-size: 0.7rem;
+  color: #9ca3af;
+  position: absolute;
+  bottom: -1.2rem;
+  right: 0.5rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -142,16 +167,17 @@ html, body {
   margin-top: auto;
   position: sticky;
   bottom: 0;
-  background: #ffffff;
+  background: #fff7ed;
   padding: 1rem 0;
+  border-top: 2px solid #fde68a;
 }
 
 .chat-form input {
   flex: 1;
   padding: 0.75rem 1rem;
   border-radius: 999px;
-  border: 1px solid #e5e7eb;
-  font-size: 0.95rem;               
+  border: 2px solid #fbbf24;
+  font-size: 1rem;               
   background: #fff7ed;
   border-color: #fbbf24;
   transition: border 0.2s ease;
@@ -168,7 +194,7 @@ html, body {
   border: none;
   padding: 0.75rem 1.25rem;
   border-radius: 999px;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
   transition: background 0.2s ease;
 }

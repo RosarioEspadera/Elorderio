@@ -15,15 +15,38 @@ window.signUp = async function () {
     return;
   }
 
- const { data, error } = await supabase.auth.signUp({
-  email,
-  password
-});
-
+  // Step 1: Sign up the user with metadata
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { name } // this sets user_metadata.name
+    }
+  });
 
   if (error) {
     alert(`Signup failed: ${error.message}`);
     return;
+  }
+
+  const user = data?.user;
+
+  // Step 2: Insert into profiles table
+  if (user) {
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+
+    if (!existingProfile) {
+      await supabase.from('profiles').insert({
+        id: user.id,
+        user_id: user.id,
+        email: user.email,
+        username: name
+      });
+    }
   }
 
   alert('Account created! Please check your inbox to confirm your email.');

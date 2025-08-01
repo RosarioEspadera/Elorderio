@@ -40,14 +40,24 @@ window.login = async function () {
 // Sign-Up Handler
 // ——————————————————————————————————————————————————
 window.signUp = async function () {
-  const email    = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value;
+ const name = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value.trim();
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { name }
+    }
+  });
+
   if (error) {
-    alert(`Sign-up failed: ${error.message}`);
-    return;
+    alert(error.message);
+  } else {
+    alert('Signup successful!');
   }
+}
   // ✅ Insert profile immediately after sign-up
   if (data?.user) {
     await supabase.from("profiles").insert({

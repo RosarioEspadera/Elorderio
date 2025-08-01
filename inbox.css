@@ -75,7 +75,21 @@ html, body {
  background: #fef3c7; /* soft amber */
   color: #78350f;       /* deep brown */
 }
-
+.admin-message {
+  background-color: #fffbe6;
+  border-left: 4px solid #d4a20e;
+  padding-left: 0.5rem;
+  font-weight: bold;
+  color: #3e2a00;
+}
+.admin-badge {
+  background-color: #d4a20e;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-left: 4px;
+}
 .bubble {
   padding: 0.75rem 1rem;
   border-radius: 12px;

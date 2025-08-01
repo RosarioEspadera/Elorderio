@@ -9,49 +9,61 @@ const chatBox = document.getElementById('chat-box');
 const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 
-// Fetch existing messages
+let currentUser = null;
+
+// Get current user
+async function getUser() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) console.error('Error fetching user:', error);
+  else currentUser = data.user;
+}
+
+// Load messages
 async function loadMessages() {
   const { data, error } = await supabase
     .from('messages')
-    .select('content, created_at, profiles(username)')
+    .select('content, created_at, sender_id, profiles(username, is_admin)')
     .order('created_at', { ascending: true });
 
   if (error) console.error('Error loading messages:', error);
   else renderMessages(data);
 }
 
-// Render messages to the chat box
+// Render messages
 function renderMessages(messages) {
   chatBox.innerHTML = '';
   messages.forEach(msg => {
     const div = document.createElement('div');
     div.className = 'chat-message';
+    if (msg.profiles?.is_admin) div.classList.add('admin-message');
     div.innerHTML = `<strong>${msg.profiles?.username || 'User'}:</strong> ${msg.content}`;
     chatBox.appendChild(div);
   });
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Send a new message
+// Send message
 chatForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const content = chatInput.value.trim();
-  if (!content) return;
+  if (!content || !currentUser) return;
 
-  const { error } = await supabase.from('messages').insert({ content });
+  const { error } = await supabase.from('messages').insert({
+    sender_id: currentUser.id,
+    content
+  });
+
   if (error) console.error('Error sending message:', error);
   chatInput.value = '';
 });
 
-// Real-time subscription
+// Real-time updates
 supabase
   .channel('group-chat')
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
-    renderMessages([...chatBox.children].map(c => ({
-      content: c.textContent.split(': ')[1],
-      profiles: { username: c.textContent.split(': ')[0] }
-    })).concat(payload.new));
+    loadMessages(); // Re-fetch to get profile info
   })
   .subscribe();
 
-loadMessages();
+await getUser();
+await loadMessages();

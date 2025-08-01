@@ -1,22 +1,23 @@
-<!-- inbox.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Elorderio Inbox</title>
-  <link rel="stylesheet" href="inbox.css" />
+  <title>Elorderio Group Chat</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section class="inbox-section">
-    <h2>📩 Send a Message to Rio’s Café</h2>
-   <div id="chat-window" class="chat-window">\
-     <div id="sender-list" class="sender-list"></div>
-  <div id="chat-log"></div>
-  <textarea id="chat-input" placeholder="Type a message..."></textarea>
-  <button onclick="sendChatMessage()">Send</button>
-</div>
-  </section>
- <script type="module" src="inbox.js"></script>
+  <main class="chat-wrapper">
+    <h2>🍽️ Elorderio Chat</h2>
+    <div id="chat-box" class="chat-box"></div>
+
+    <form id="chat-form" class="chat-form">
+      <input type="text" id="chat-input" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </main>
+
+  <script type="module" src="inbox.js"></script>
 </body>
 </html>
+

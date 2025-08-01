@@ -9,8 +9,11 @@
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
   <link rel="stylesheet" href="inbox.css" />
+  
 </head>
 <body>
+  <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
+
   <main class="chat-wrapper">
      <div class="inbox-header">🍽️ Elorderio Chat</div>
     <div id="chat-box" class="chat-box"></div>
@@ -26,6 +29,25 @@
   <a class="tab-link" href="inbox.html"><span>📥</span><p>Inbox</p></a>
 </nav>
   <script type="module" src="inbox.js"></script>
+  <script>
+  const toggleBtn = document.getElementById('themeToggle');
+  const body = document.body;
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) body.setAttribute('data-theme', savedTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const current = body.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+  });
+
+  // Set initial button label
+  toggleBtn.textContent = body.getAttribute('data-theme') === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+</script>
 </body>
 </html>
 

@@ -11,17 +11,20 @@ window.signUp = async function () {
   const password = document.getElementById('signup-password')?.value.trim();
 
   if (!name || !email || !password) {
-    alert('Please fill out all fields.');
-    return;
-  }
+  alert('Please fill out all fields.');
+  return;
+}
+console.log({ name, email, password });
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { name }
-    }
-  });
+
+ const { data, error } = await supabase.auth.signUp({
+  email,
+  password,
+  options: {
+    data: { name } // This becomes user_metadata.name
+  }
+});
+
 
   if (error) {
     alert(`Signup failed: ${error.message}`);

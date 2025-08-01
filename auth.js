@@ -9,64 +9,71 @@ const supabase = createClient(
 // ——————————————————————————————————————————————————
 // Grab DOM nodes
 // ——————————————————————————————————————————————————
-document.getElementById('show-signup').addEventListener('click', () => {
-  document.getElementById('signup-section').classList.remove('hidden');
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById('loginButton');
+  const showSignupLink = document.getElementById('showSignupLink');
+  const signupSection = document.getElementById('signup-section');
 
+  if (loginBtn) {
+    loginBtn.addEventListener('click', login);
+  }
 
-// Reveal the Sign-Up form when the user clicks “Create one”
-showSignupLink.addEventListener('click', e => {
-  e.preventDefault();
-  signupSection.classList.remove('hidden');
-  showSignupLink.closest('p').classList.add('hidden');
+  if (showSignupLink && signupSection) {
+    showSignupLink.addEventListener('click', e => {
+      e.preventDefault();
+      signupSection.classList.remove('hidden');
+      showSignupLink.closest('p').classList.add('hidden');
+    });
+  }
 });
 
 // ——————————————————————————————————————————————————
 // Login Handler
 // ——————————————————————————————————————————————————
-window.login = async function () {
-  const email    = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
+async function login() {
+  const email = document.getElementById('email')?.value.trim();
+  const password = document.getElementById('password')?.value;
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    alert(`Login failed: ${error.message}`);
+  if (!email || !password) {
+    alert('Please enter both email and password.');
     return;
   }
 
-  // Redirect on success
-  window.location.href = 'profile.html';
-};
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    alert(`Login failed: ${error.message}`);
+  } else {
+    window.location.href = 'profile.html';
+  }
+}
 
 // ——————————————————————————————————————————————————
 // Sign-Up Handler
 // ——————————————————————————————————————————————————
 window.signUp = async function () {
- const name = document.getElementById('signup-name').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const password = document.getElementById('signup-password').value.trim();
+  const email = document.getElementById('signup-email')?.value.trim();
+  const password = document.getElementById('signup-password')?.value.trim();
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { name }
-    }
-  });
+  if (!email || !password) {
+    alert('Please fill out all fields.');
+    return;
+  }
+
+  const { data, error } = await supabase.auth.signUp({ email, password });
 
   if (error) {
-    alert(error.message);
-  } else {
-    alert('Signup successful!');
-  }
-}
-  // ✅ Insert profile immediately after sign-up
-  if (data?.user) {
-    await supabase.from("profiles").insert({
-      id: data.user.id,        // UUID from auth.users
-      user_id: data.user.id,   // your foreign key
-      email: data.user.email   // now stored in profiles
-    });
+    alert(`Signup failed: ${error.message}`);
+    return;
   }
 
-  alert('Account created! Please check your inbox to confirm.');
+  if (data?.user) {
+    await supabase.from('profiles').insert({
+      id: data.user.id,
+      user_id: data.user.id,
+      email: data.user.email
+    });
+
+    alert('Account created! Please check your inbox to confirm.');
+  }
+};

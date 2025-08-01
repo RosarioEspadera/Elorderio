@@ -371,5 +371,49 @@ footer {
   color: #777;
   margin-top: 1rem;
 }
+.chat-wrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fffaf7;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.chat-box {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #fff0e0;
+  border-radius: 8px;
+}
+
+.chat-message {
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  color: #5f4638;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.chat-form button {
+  background-color: #a15c2f;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
 

@@ -12,6 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   </head>
   <body class="bg-amber-50 text-gray-900 font-sans p-6">
+    <button id="themeToggle" class="theme-toggle">🌙 Dark Mode</button>
     <header class="text-center p-6 bg-yellow-100 rounded shadow">
       <h1 class="text-4xl font-bold text-amber-800">Elorderio</h1>
       <p class="text-xl text-gray-600">Where ideas are plated like delicacies.</p>
@@ -312,5 +313,25 @@
 </nav>
 
     <script type="module" src="script.js"></script>
+    <script>
+  const toggleBtn = document.getElementById('themeToggle');
+  const body = document.body;
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) body.setAttribute('data-theme', savedTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const current = body.getAttribute('data-theme');
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    toggleBtn.textContent = newTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+  });
+
+  // Set initial button label
+  toggleBtn.textContent = body.getAttribute('data-theme') === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+</script>
   </body>
 </html>
+

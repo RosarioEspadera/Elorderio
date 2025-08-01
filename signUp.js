@@ -15,17 +15,11 @@ window.signUp = async function () {
     return;
   }
 
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-  data: {
-    name,
-    username: name, // fallback
-    avatar_url: ''  // optional, but avoids null errors
-  }
-}
-  });
+ const { data, error } = await supabase.auth.signUp({
+  email,
+  password
+});
+
 
   if (error) {
     alert(`Signup failed: ${error.message}`);

@@ -9,8 +9,10 @@ const supabase = createClient(
 // ——————————————————————————————————————————————————
 // Grab DOM nodes
 // ——————————————————————————————————————————————————
-const showSignupLink = document.getElementById('show-signup');
-const signupSection  = document.getElementById('signup-section');
+document.getElementById('show-signup').addEventListener('click', () => {
+  document.getElementById('signup-section').classList.remove('hidden');
+});
+
 
 // Reveal the Sign-Up form when the user clicks “Create one”
 showSignupLink.addEventListener('click', e => {

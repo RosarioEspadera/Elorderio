@@ -7,25 +7,25 @@
   padding: 0;
 }
 
-body {
+html, body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  background-color: #fefcf9;
+  background-color: #fffdf7;
   color: #1f2937;
   line-height: 1.6;
-  padding: 1rem;
+  height: 100%;
   overflow-x: hidden;
 }
 
 /* ─────────────────────────────────────────────
-   Inbox Container
+   Chat Wrapper
 ────────────────────────────────────────────── */
-.inbox-wrapper {
+.chat-wrapper {
   max-width: 640px;
   margin: auto;
+  padding: 2rem 1rem 6rem;
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  padding: 2rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -36,17 +36,17 @@ body {
    Header
 ────────────────────────────────────────────── */
 .inbox-header {
-  text-align: center;
   font-size: 1.5rem;
   font-weight: 600;
+  text-align: center;
   color: #3b3b3b;
   margin-bottom: 1rem;
 }
 
 /* ─────────────────────────────────────────────
-   Message List
+   Chat Box
 ────────────────────────────────────────────── */
-.message-list {
+.chat-box {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -84,6 +84,11 @@ body {
   position: relative;
   font-size: 0.95rem;
   line-height: 1.5;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.bubble:hover {
+  transform: scale(1.02);
 }
 
 /* ─────────────────────────────────────────────
@@ -115,15 +120,19 @@ body {
 }
 
 /* ─────────────────────────────────────────────
-   Input Area
+   Chat Form
 ────────────────────────────────────────────── */
-.inbox-input {
+.chat-form {
   display: flex;
   gap: 0.75rem;
-  margin-top: 1rem;
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  padding: 1rem 0;
 }
 
-.inbox-input input {
+.chat-form input {
   flex: 1;
   padding: 0.75rem 1rem;
   border-radius: 999px;
@@ -133,12 +142,12 @@ body {
   transition: border 0.2s ease;
 }
 
-.inbox-input input:focus {
+.chat-form input:focus {
   outline: none;
   border-color: #f59e0b;
 }
 
-.inbox-input button {
+.chat-form button {
   background: #f59e0b;
   color: white;
   border: none;
@@ -149,31 +158,56 @@ body {
   transition: background 0.2s ease;
 }
 
-.inbox-input button:hover {
+.chat-form button:hover {
   background: #d97706;
 }
 
 /* ─────────────────────────────────────────────
-   Role Styling
+   Bottom Tab Navigation
 ────────────────────────────────────────────── */
-.admin .name {
+.bottom-tab {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-around;
+  padding: 0.75rem 0;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+}
+
+.tab-link {
+  text-align: center;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.2s ease;
+}
+
+.tab-link:hover {
   color: #f59e0b;
 }
 
-.user .name {
-  color: #6b7280;
+.tab-link span {
+  font-size: 1.25rem;
+  display: block;
 }
 
 /* ─────────────────────────────────────────────
-   Scrollbar Styling
+   System & Error Messages
 ────────────────────────────────────────────── */
-.message-list::-webkit-scrollbar {
-  width: 6px;
+.bubble[data-type='system'] {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-style: italic;
 }
 
-.message-list::-webkit-scrollbar-thumb {
-  background-color: #f59e0b;
-  border-radius: 999px;
+.bubble[data-type='error'] {
+  background: #fee2e2;
+  color: #b91c1c;
+  font-weight: 600;
 }
 
 /* ─────────────────────────────────────────────
@@ -191,30 +225,46 @@ body {
 }
 
 /* ─────────────────────────────────────────────
+   Scrollbar Styling
+────────────────────────────────────────────── */
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background-color: #f59e0b;
+  border-radius: 999px;
+}
+
+/* ─────────────────────────────────────────────
    Responsive Design
 ────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  .inbox-wrapper {
-    padding: 1rem;
+  .chat-wrapper {
+    padding: 1rem 0.5rem 6rem;
   }
 
   .bubble {
     font-size: 0.9rem;
   }
 
-  .inbox-input input {
+  .chat-form input {
     font-size: 0.9rem;
   }
 
-  .inbox-input button {
+  .chat-form button {
     padding: 0.5rem 1rem;
+  }
+
+  .tab-link span {
+    font-size: 1rem;
   }
 }
 
 /* ─────────────────────────────────────────────
    Decorative Accents
 ────────────────────────────────────────────── */
-.inbox-wrapper::before {
+.chat-wrapper::before {
   content: '';
   position: absolute;
   top: -40px;
@@ -226,7 +276,7 @@ body {
   z-index: -1;
 }
 
-.inbox-wrapper::after {
+.chat-wrapper::after {
   content: '';
   position: absolute;
   bottom: -40px;
@@ -236,64 +286,6 @@ body {
   background: radial-gradient(circle, #f59e0b 30%, transparent 70%);
   border-radius: 50%;
   z-index: -1;
-}
-
-/* ─────────────────────────────────────────────
-   Message Variants
-────────────────────────────────────────────── */
-.bubble[data-type='system'] {
-  background: #e0f2fe;
-  color: #0369a1;
-  font-style: italic;
-}
-
-.bubble[data-type='error'] {
-  background: #fee2e2;
-  color: #b91c1c;
-  font-weight: 600;
-}
-
-/* ─────────────────────────────────────────────
-   Transitions
-────────────────────────────────────────────── */
-.bubble {
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.bubble:hover {
-  transform: scale(1.02);
-}
-
-/* ─────────────────────────────────────────────
-   Message Status
-────────────────────────────────────────────── */
-.status {
-  font-size: 0.75rem;
-  color: #9ca3af;
-  margin-top: 0.25rem;
-  text-align: left;
-}
-
-/* ─────────────────────────────────────────────
-   Message Actions
-────────────────────────────────────────────── */
-.message-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-
-.message-actions button {
-  background: none;
-  border: none;
-  color: #6b7280;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-}
-
-.message-actions button:hover {
-  color: #f59e0b;
 }
 
 /* ─────────────────────────────────────────────

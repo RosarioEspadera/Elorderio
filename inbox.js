@@ -97,11 +97,10 @@ function renderMessage(msg) {
   div.className = 'chat-message';
 
   const profile = profileCache.get(msg.sender_id) || {};
-  if (profile.is_admin) div.classList.add('admin-message');
-
   const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
-div.innerHTML = `<strong>${profile.username || 'User'}</strong> ${badge}: ${msg.content}`;
+  const name = profile.username || 'User';
 
+  div.innerHTML = `<strong>${name}</strong> ${badge}: ${msg.content}`;
   chatBox.appendChild(div);
 }
 

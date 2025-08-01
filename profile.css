@@ -181,4 +181,32 @@ body {
   --bg: #fff8e1;
   --text: #1f2937;
 }
+.upload-btn, .logout-btn {
+  background: #6c63ff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.upload-btn:hover, .logout-btn:hover {
+  background: #554cd8;
+}
+.info-note {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 1rem;
+}
+.bottom-tab {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff5eb;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 0;
+  z-index: 999;
+}
 

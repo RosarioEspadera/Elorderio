@@ -22,6 +22,7 @@ async function getUser() {
 
   currentUser = data.user;
 
+  // Check if profile exists
   const { data: profile, error: profileErr } = await supabase
     .from('profiles')
     .select('id')
@@ -34,20 +35,24 @@ async function getUser() {
   }
 
   if (!profile) {
-    const { error: insertErr } = await supabase.from('profiles').insert({
-      id: currentUser.id,
-      username: currentUser.user_metadata?.name || 'Anonymous',
-      avatar_url: currentUser.user_metadata?.avatar_url || null,
-      is_admin: false
-    });
+    // Defensive insert: use upsert to avoid duplicate key error
+    const { error: insertErr } = await supabase
+      .from('profiles')
+      .upsert({
+        id: currentUser.id,
+        username: currentUser.user_metadata?.name || 'Anonymous',
+        avatar_url: currentUser.user_metadata?.avatar_url || null,
+        is_admin: false
+      }, { onConflict: 'id' });
 
     if (insertErr) {
       console.error('Error inserting profile:', insertErr);
     } else {
-      console.log('Profile created for user:', currentUser.id);
+      console.log('Profile created or confirmed for user:', currentUser.id);
     }
   }
 }
+
 
 // Load initial messages
 async function loadMessages() {

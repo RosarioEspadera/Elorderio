@@ -11,25 +11,11 @@ const supabase = createClient(
 // ——————————————————————————————————————————————————
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.getElementById('loginButton');
-  const showSignupLink = document.getElementById('showSignupLink');
-  const signupSection = document.getElementById('signup-section');
+  loginBtn?.addEventListener('click', login);
 
-  if (loginBtn) {
-    loginBtn.addEventListener('click', login);
-  }
-
-  if (showSignupLink && signupSection) {
-    showSignupLink.addEventListener('click', e => {
-      e.preventDefault();
-      signupSection.classList.remove('hidden');
-      showSignupLink.closest('p').classList.add('hidden');
-    });
-  }
+  checkAndCreateProfile(); // Run after login if user is confirmed
 });
 
-// ——————————————————————————————————————————————————
-// Login Handler
-// ——————————————————————————————————————————————————
 async function login() {
   const email = document.getElementById('email')?.value.trim();
   const password = document.getElementById('password')?.value;
@@ -48,32 +34,29 @@ async function login() {
   }
 }
 
-// ——————————————————————————————————————————————————
-// Sign-Up Handler
-// ——————————————————————————————————————————————————
-window.signUp = async function () {
-  const email = document.getElementById('signup-email')?.value.trim();
-  const password = document.getElementById('signup-password')?.value.trim();
+async function checkAndCreateProfile() {
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) return;
 
-  if (!email || !password) {
-    alert('Please fill out all fields.');
-    return;
-  }
+  const { data: existingProfile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', user.id)
+    .single();
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
-
-  if (error) {
-    alert(`Signup failed: ${error.message}`);
-    return;
-  }
-
-  if (data?.user) {
-    await supabase.from('profiles').insert({
-      id: data.user.id,
-      user_id: data.user.id,
-      email: data.user.email
+  if (!existingProfile) {
+    const { error: insertError } = await supabase.from('profiles').insert({
+      id: user.id,
+      user_id: user.id,
+      email: user.email,
+      username: user.user_metadata?.name || 'New User'
     });
 
-    alert('Account created! Please check your inbox to confirm.');
+    if (insertError) {
+      console.error('Profile insert error:', insertError);
+    } else {
+      console.log('Profile created successfully.');
+    }
   }
-};
+}
+

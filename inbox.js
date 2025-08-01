@@ -92,41 +92,16 @@ function renderMessages(messages) {
 }
 
 // Render a single message
-async function renderMessage(msg) {
-  let profile = profileCache.get(msg.sender_id);
-
-  if (!profile) {
-    profile = await fetchProfile(msg.sender_id);
-    profileCache.set(msg.sender_id, profile);
-  }
-
-  const div = document.createElement('div');
-  div.className = 'chat-message';
-
+function renderMessage(msg) {
+  const profile = msg.profiles || profileCache.get(msg.sender_id) || { username: 'User', is_admin: false };
   const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
   const name = profile.username || 'User';
 
+  const div = document.createElement('div');
+  div.className = 'chat-message';
   div.innerHTML = `<strong>${name}</strong> ${badge}: ${msg.content}`;
   chatBox.appendChild(div);
 }
-async function fetchProfile(userId) {
-  const response = await fetch(`https://bcmibfnrydyzomootwcb.supabase.co/rest/v1/profiles?select=username,is_admin&id=eq.${userId}`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Accept': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    console.error('Failed to fetch profile:', response.status);
-    return { username: 'User', is_admin: false };
-  }
-
-  const data = await response.json();
-  return data[0] || { username: 'User', is_admin: false };
-}
-
 
 
 // Send message
@@ -154,24 +129,36 @@ supabase
   .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async payload => {
     const msg = payload.new;
 
-    // Fetch profile if not cached
-    if (!profileCache.has(msg.sender_id)) {
-      const { data: profile, error } = await supabase
+    let profile = profileCache.get(msg.sender_id);
+    if (!profile) {
+      const { data, error } = await supabase
         .from('profiles')
         .select('username, is_admin')
         .eq('id', msg.sender_id)
         .maybeSingle();
 
-      if (profile && !error) {
-        profileCache.set(msg.sender_id, profile);
+      if (data && !error) {
+        profileCache.set(msg.sender_id, data);
+        profile = data;
+      } else {
+        profile = { username: 'User', is_admin: false };
       }
     }
 
-    renderMessage(msg);
+    renderMessage({ ...msg, profiles: profile });
     chatBox.scrollTop = chatBox.scrollHeight;
   })
   .subscribe();
 
+async function fetchProfile(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('username, is_admin')
+    .eq('id', userId)
+    .maybeSingle();
+
+  return data || { username: 'User', is_admin: false };
+}
 // Init
 await getUser();
 await loadMessages();

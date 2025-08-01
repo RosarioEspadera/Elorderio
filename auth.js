@@ -70,4 +70,3 @@ window.signUp = async function () {
   }
 
   alert('Account created! Please check your inbox to confirm.');
-};

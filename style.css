@@ -12,27 +12,31 @@
 body {
   transition: background-color 0.3s ease;
   font-family: 'Poppins', sans-serif;
-    background-color: #f8f5f2;
-   color: #3c3c3c;
-  line-height: 1.6;
+  background-color: #fdf6ec;
+  color: #3c2f2f;
+  line-height: 1.7;
   padding: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* 🧁 Header */
 header {
+  background: linear-gradient(to right, #fff0d6, #ffe4b5);
   background-color: #fff0d6;
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 header h1 {
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   color: #a15c2f;
+  text-shadow: 1px 1px 0 #fff;
 }
 header p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #6b4c3b;
+  margin-top: 0.5rem;
 }
 img {
   max-height: 200px;
@@ -50,14 +54,14 @@ img {
 
 /* 🍲 Dish Card */
 .dish-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  background: #fffdf7;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   overflow: hidden;
- transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   min-height: 360px;
   height: auto;
-  padding: 1.2rem;
+  padding: 1.5rem;
 }
 .dish-card.hidden {
   opacity: 0;
@@ -66,6 +70,7 @@ img {
 }
 .dish-card:hover {
   transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 .dish-card img {
   width: 100%;
@@ -186,47 +191,6 @@ footer {
   font-size: 0.8rem;
   color: #999;
 } 
-.profile-wrapper {
-  max-width: 420px;
-  margin: 2rem auto;
-  background: #fdfdfd;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.06);
-  text-align: center;
-}
-.greeting {
-  margin-bottom: 1.5rem;
-  font-size: 1.4rem;
-  color: #333;
-}
-.avatar-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.8rem;
-}
-.avatar-img {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ddd;
-}
-.avatar-input {
-  display: block;
-}
-.upload-btn, .logout-btn {
-  background: #6c63ff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.upload-btn:hover, .logout-btn:hover {
-  background: #554cd8;
-}
 .info-note {
   font-size: 0.9rem;
   color: #777;
@@ -294,141 +258,26 @@ footer {
   color: #3e2a00;
   font-weight: 600;
 }
-
-/* 🍮 Auth Page Wrapper */
-.auth-wrapper {
-  max-width: 480px;
-  margin: 2rem auto;
-  background: #fdf7ef;
-  padding: 2rem 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-  text-align: center;
+body[data-theme='dark'] {
+  background-color: #1e1e1e;
+  color: #f3f3f3;
 }
 
-/* 🧁 Auth Header */
-.auth-wrapper h1 {
-  font-size: 2.2rem;
-  color: #a15c2f;
-  margin-bottom: 0.5rem;
+body[data-theme='dark'] header {
+  background: #2c2c2c;
+  color: #fbbf24;
 }
 
-.auth-wrapper p {
-  font-size: 1rem;
-  color: #6b4c3b;
-  margin-bottom: 2rem;
+body[data-theme='dark'] .dish-card {
+  background: #2a2a2a;
+  color: #f3f3f3;
+  box-shadow: none;
 }
 
-/* ✏️ Form Labels & Inputs */
-.auth-wrapper label {
-  display: block;
-  text-align: left;
-  margin-top: 1.2rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #5f4638;
+body[data-theme='dark'] .dish-info h2 {
+  color: #fbbf24;
 }
 
-.auth-wrapper input {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  margin-top: 0.3rem;
-  border-radius: 8px;
-  border: 1px solid #e2d8c9;
-  background-color: #fffaf7;
-  font-size: 0.95rem;
-  color: #3c3c3c;
-  transition: border-color 0.3s ease;
-}
 
-.auth-wrapper input:focus {
-  outline: none;
-  border-color: #a15c2f;
-}
-
-/* 🍪 Buttons */
-.auth-wrapper button {
-  margin-top: 1.5rem;
-  width: 100%;
-  background: #a15c2f;
-  color: white;
-  padding: 0.8rem 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-  transition: background-color 0.3s ease;
-}
-
-.auth-wrapper button:hover {
-  background: #c06e3a;
-}
-
-/* 🌟 Supporting Text */
-.auth-wrapper .info-note {
-  font-size: 0.85rem;
-  color: #777;
-  margin-top: 1rem;
-}
-.chat-wrapper {
-  max-width: 600px;
-  margin: 2rem auto;
-  background: #fffaf7;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.chat-box {
-  max-height: 400px;
-  overflow-y: auto;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background: #fff0e0;
-  border-radius: 8px;
-}
-
-.chat-message {
-  margin-bottom: 0.8rem;
-  font-size: 0.95rem;
-  color: #5f4638;
-}
-
-.chat-form {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.chat-form input {
-  flex: 1;
-  padding: 0.6rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.chat-form button {
-  background-color: #a15c2f;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.admin-message {
-  background-color: #fffbe6;
-  border-left: 4px solid #d4a20e;
-  padding-left: 0.5rem;
-  font-weight: bold;
-  color: #3e2a00;
-}
-.admin-badge {
-  background-color: #d4a20e;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  margin-left: 4px;
-}
 
 

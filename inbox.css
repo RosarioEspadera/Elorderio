@@ -260,7 +260,18 @@ html, body {
     font-size: 1rem;
   }
 }
-
+.bottom-tab {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #fff5eb;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 0;
+  z-index: 999;
+}
 /* ─────────────────────────────────────────────
    Decorative Accents
 ────────────────────────────────────────────── */

@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Curio Login</title>
   <link rel="stylesheet" href="auth.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,10 +17,10 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="login()">Login</button>
-<p class="mt-4">
-      Don’t have an account? 
-      <a href="#" id="show-signup" class="text-amber-600 hover:underline">Create one</a>
-    </p>
+<p>
+  <a href="#" id="showSignupLink">Create New Account</a>
+</p>
+
     <hr style="margin: 2rem 0;" />
 <div id="signup-section" class="hidden">
     <h2>Sign Up</h2>

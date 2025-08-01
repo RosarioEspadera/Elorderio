@@ -78,6 +78,29 @@ async function loadMessages() {
   renderMessages(data);
 }
 
+async function loadUserNames() {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, full_name');
+
+  if (error) {
+    console.error('Error fetching user names:', error);
+    return;
+  }
+
+  const inboxList = document.getElementById('inbox-users');
+  inboxList.innerHTML = '';
+
+  data.forEach(user => {
+    const item = document.createElement('div');
+    item.className = 'user-entry';
+    item.textContent = user.full_name;
+    inboxList.appendChild(item);
+  });
+}
+
+loadUserNames();
+
 // Render messages
 function renderMessages(messages) {
   chatBox.innerHTML = '';

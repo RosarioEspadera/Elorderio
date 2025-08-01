@@ -99,6 +99,20 @@ html, body {
   border-top: 1px solid var(--hr-color);
   margin: 2rem 0;
 }
+#signup-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+#signup-section input {
+  margin-bottom: 0.75rem;
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+}
 
 /* ─── Utility Classes ─────────────────────────────────────────────────────── */
 .hidden {

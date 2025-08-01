@@ -415,5 +415,12 @@ footer {
   border-radius: 8px;
   cursor: pointer;
 }
+.admin-message {
+  background-color: #fffbe6;
+  border-left: 4px solid #d4a20e;
+  padding-left: 0.5rem;
+  font-weight: bold;
+  color: #3e2a00;
+}
 
 

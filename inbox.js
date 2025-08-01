@@ -94,7 +94,8 @@ function renderMessages(messages) {
 // Render a single message
 function renderMessage(msg) {
   const profile = msg.profiles || profileCache.get(msg.sender_id) || { username: 'User', is_admin: false };
-  const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
+const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
+
   const name = profile.username || 'User';
 
   const div = document.createElement('div');
@@ -131,18 +132,8 @@ supabase
 
     let profile = profileCache.get(msg.sender_id);
     if (!profile) {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username, is_admin')
-        .eq('id', msg.sender_id)
-        .maybeSingle();
-
-      if (data && !error) {
-        profileCache.set(msg.sender_id, data);
-        profile = data;
-      } else {
-        profile = { username: 'User', is_admin: false };
-      }
+      profile = await fetchProfile(msg.sender_id);
+      profileCache.set(msg.sender_id, profile);
     }
 
     renderMessage({ ...msg, profiles: profile });

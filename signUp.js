@@ -15,24 +15,19 @@ window.signUp = async function () {
     return;
   }
 
-  console.log('Signing up with:', { name, email });
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      data: { name } // Stored in user_metadata
+      data: { name }
     }
   });
 
   if (error) {
-    console.error('Signup error:', error);
     alert(`Signup failed: ${error.message}`);
     return;
   }
 
   alert('Account created! Please check your inbox to confirm your email.');
-
-  // Optional: redirect to login or confirmation page
   window.location.href = 'auth.html';
 };

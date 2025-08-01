@@ -19,8 +19,12 @@ window.signUp = async function () {
     email,
     password,
     options: {
-      data: { name }
-    }
+  data: {
+    name,
+    username: name, // fallback
+    avatar_url: ''  // optional, but avoids null errors
+  }
+}
   });
 
   if (error) {

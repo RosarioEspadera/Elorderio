@@ -92,17 +92,33 @@ function renderMessages(messages) {
 }
 
 // Render a single message
-function renderMessage(msg) {
+async function renderMessage(msg) {
+  let profile = profileCache.get(msg.sender_id);
+
+  if (!profile) {
+    profile = await fetchProfile(msg.sender_id);
+    profileCache.set(msg.sender_id, profile);
+  }
+
   const div = document.createElement('div');
   div.className = 'chat-message';
 
-  const profile = profileCache.get(msg.sender_id) || {};
   const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
   const name = profile.username || 'User';
 
   div.innerHTML = `<strong>${name}</strong> ${badge}: ${msg.content}`;
   chatBox.appendChild(div);
 }
+async function fetchProfile(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('username, is_admin')
+    .eq('id', userId)
+    .single();
+
+  return data || { username: 'User', is_admin: false };
+}
+
 
 
 // Send message

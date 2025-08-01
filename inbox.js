@@ -112,7 +112,7 @@ async function renderMessage(msg) {
 async function fetchProfile(userId) {
   const response = await fetch(`https://bcmibfnrydyzomootwcb.supabase.co/rest/v1/profiles?select=username,is_admin&id=eq.${userId}`, {
     headers: {
-      'apikey': SUPABASE_ANON_KEY,
+      'apikey': SUPABASE_KEY,
       'Authorization': `Bearer ${SUPABASE_KEY}`,
       'Accept': 'application/json'
     }

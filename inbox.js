@@ -10,6 +10,7 @@ const chatForm = document.getElementById('chat-form');
 const chatInput = document.getElementById('chat-input');
 
 let currentUser = null;
+const profileCache = new Map(); // Cache sender_id → { username, is_admin }
 
 // Get current user and ensure profile exists
 async function getUser() {
@@ -48,7 +49,7 @@ async function getUser() {
   }
 }
 
-// Load messages
+// Load initial messages
 async function loadMessages() {
   const { data, error } = await supabase
     .from('messages')
@@ -59,6 +60,15 @@ async function loadMessages() {
     console.error('Error loading messages:', error);
     return;
   }
+
+  data.forEach(msg => {
+    if (msg.profiles) {
+      profileCache.set(msg.sender_id, {
+        username: msg.profiles.username,
+        is_admin: msg.profiles.is_admin
+      });
+    }
+  });
 
   renderMessages(data);
 }
@@ -72,16 +82,20 @@ function renderMessages(messages) {
     return;
   }
 
-  messages.forEach(msg => {
-    const div = document.createElement('div');
-    div.className = 'chat-message';
-    if (msg.profiles?.is_admin) div.classList.add('admin-message');
-
-    div.innerHTML = `<strong>${msg.profiles?.username || 'User'}:</strong> ${msg.content}`;
-    chatBox.appendChild(div);
-  });
-
+  messages.forEach(renderMessage);
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Render a single message
+function renderMessage(msg) {
+  const div = document.createElement('div');
+  div.className = 'chat-message';
+
+  const profile = profileCache.get(msg.sender_id) || {};
+  if (profile.is_admin) div.classList.add('admin-message');
+
+  div.innerHTML = `<strong>${profile.username || 'User'}:</strong> ${msg.content}`;
+  chatBox.appendChild(div);
 }
 
 // Send message
@@ -106,8 +120,24 @@ chatForm.addEventListener('submit', async (e) => {
 // Real-time updates
 supabase
   .channel('group-chat')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
-    loadMessages(); // Re-fetch to get profile info
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, async payload => {
+    const msg = payload.new;
+
+    // Fetch profile if not cached
+    if (!profileCache.has(msg.sender_id)) {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('username, is_admin')
+        .eq('id', msg.sender_id)
+        .maybeSingle();
+
+      if (profile && !error) {
+        profileCache.set(msg.sender_id, profile);
+      }
+    }
+
+    renderMessage(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
   })
   .subscribe();
 

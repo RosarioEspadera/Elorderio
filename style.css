@@ -327,6 +327,38 @@ body[data-theme='dark'] .cart-total strong {
   background: linear-gradient(135deg, #f59e0b, #fbbf24);
   transform: scale(1.05);
 }
+body[data-theme='dark'] #cart-table {
+  background-color: #2a2a2a;
+  border-collapse: collapse;
+  width: 100%;
+  color: #f3f3f3;
+}
+
+body[data-theme='dark'] #cart-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #444;
+}
+
+body[data-theme='dark'] #cart-table tr:last-child td {
+  border-bottom: none;
+}
+
+body[data-theme='dark'] #cart-table button {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+body[data-theme='dark'] #cart-table button:hover {
+  color: #ff9e9e;
+}
+body[data-theme='dark'] #cart-table tr:hover {
+  background-color: #333;
+}
+
 
 
 

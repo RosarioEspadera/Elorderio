@@ -4,81 +4,54 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 const SUPABASE_URL = 'https://bcmibfnrydyzomootwcb.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWliZm5yeWR5em9tb290d2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM4MDg3MzQsImV4cCI6MjA2OTM4NDczNH0.bu4jf3dH07tvgUcL0laZJnmLGL6nPDo4Q9XRCXTBO9I'; // Replace with secure env key
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-const user = await supabase.auth.getUser();
-const currentUserId = user.data.user.id;
-const adminId = '081ee8b0-334c-4446-a8f0-bccfba864f6c';
 
-window.sendChatMessage = async function () {
-  const content = document.getElementById("chat-input").value;
-  const { error } = await supabase.from("messages").insert([{
-    sender_id: currentUserId,
-    receiver_id: adminId,
-    content,
-    is_admin: false
-  }]);
-  if (!error) document.getElementById("chat-input").value = "";
-};
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
 
-// Fetch distinct senders who messaged admin
-if (currentUserId === adminId) {
-  const { data: senders } = await supabase
-    .from("messages")
-    .select("sender_id", { distinct: true })
-    .eq("receiver_id", adminId)
-    .neq("sender_id", adminId);
-
-  senders.forEach(({ sender_id }) => {
-    const btn = document.createElement("button");
-    btn.textContent = `Reply to ${sender_id.slice(0, 6)}...`;
-    btn.onclick = () => loadConversation(sender_id);
-    document.getElementById("sender-list").appendChild(btn);
-  });
-}
-
-async function loadConversation(customerId) {
-  const { data: messages } = await supabase
-    .from("messages")
-    .select("*")
-    .or(`sender_id.eq.${customerId},receiver_id.eq.${customerId}`)
-    .order("timestamp", { ascending: true });
-
-  const chatLog = document.getElementById("chat-log");
-  chatLog.innerHTML = "";
-  messages.forEach(msg => {
-    const bubble = document.createElement("div");
-    bubble.className = msg.sender_id === adminId ? "admin-bubble" : "user-bubble";
-    bubble.textContent = msg.content;
-    chatLog.appendChild(bubble);
-  });
-
-  // Store selected customer for replies
-  window.selectedCustomerId = customerId;
-}
-window.sendAdminReply = async function () {
-  const content = document.getElementById("chat-input").value;
-  await supabase.from("messages").insert([{
-    sender_id: adminId,
-    receiver_id: window.selectedCustomerId,
-    content,
-    is_admin: true
-  }]);
-  document.getElementById("chat-input").value = "";
-  loadConversation(window.selectedCustomerId); // Refresh view
-};
-
+// Fetch existing messages
 async function loadMessages() {
-  const { data } = await supabase
-    .from("messages")
-    .select("*")
-    .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
-    .order("timestamp", { ascending: true });
+  const { data, error } = await supabase
+    .from('messages')
+    .select('content, created_at, profiles(username)')
+    .order('created_at', { ascending: true });
 
-  const chatLog = document.getElementById("chat-log");
-  chatLog.innerHTML = data.map(msg => `
-    <div class="${msg.is_admin ? 'admin-msg' : 'user-msg'}">
-      ${msg.content}
-    </div>
-  `).join("");
+  if (error) console.error('Error loading messages:', error);
+  else renderMessages(data);
 }
 
-setInterval(loadMessages, 3000); // Poll every 3s
+// Render messages to the chat box
+function renderMessages(messages) {
+  chatBox.innerHTML = '';
+  messages.forEach(msg => {
+    const div = document.createElement('div');
+    div.className = 'chat-message';
+    div.innerHTML = `<strong>${msg.profiles?.username || 'User'}:</strong> ${msg.content}`;
+    chatBox.appendChild(div);
+  });
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Send a new message
+chatForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const content = chatInput.value.trim();
+  if (!content) return;
+
+  const { error } = await supabase.from('messages').insert({ content });
+  if (error) console.error('Error sending message:', error);
+  chatInput.value = '';
+});
+
+// Real-time subscription
+supabase
+  .channel('group-chat')
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+    renderMessages([...chatBox.children].map(c => ({
+      content: c.textContent.split(': ')[1],
+      profiles: { username: c.textContent.split(': ')[0] }
+    })).concat(payload.new));
+  })
+  .subscribe();
+
+loadMessages();

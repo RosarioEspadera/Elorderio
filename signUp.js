@@ -11,42 +11,28 @@ window.signUp = async function () {
   const password = document.getElementById('signup-password')?.value.trim();
 
   if (!name || !email || !password) {
-  alert('Please fill out all fields.');
-  return;
-}
-console.log({ name, email, password });
-
-
- const { data, error } = await supabase.auth.signUp({
-  email,
-  password,
-  options: {
-    data: { name } // This becomes user_metadata.name
+    alert('Please fill out all fields.');
+    return;
   }
-});
 
+  console.log('Signing up with:', { name, email });
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { name } // Stored in user_metadata
+    }
+  });
 
   if (error) {
+    console.error('Signup error:', error);
     alert(`Signup failed: ${error.message}`);
     return;
   }
 
- const { data: { user } } = await supabase.auth.getUser();
+  alert('Account created! Please check your inbox to confirm your email.');
 
-const { data: existingProfile } = await supabase
-  .from('profiles')
-  .select('id')
-  .eq('id', user.id)
-  .single();
-
-if (!existingProfile) {
-  await supabase.from('profiles').insert({
-    id: user.id,
-    user_id: user.id,
-    email: user.email,
-    username: user.user_metadata.name
-  });
-
-    alert('Account created! Please check your inbox to confirm.');
-  }
+  // Optional: redirect to login or confirmation page
+  window.location.href = 'auth.html';
 };

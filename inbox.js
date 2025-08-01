@@ -99,9 +99,12 @@ function renderMessage(msg) {
   const profile = profileCache.get(msg.sender_id) || {};
   if (profile.is_admin) div.classList.add('admin-message');
 
-  div.innerHTML = `<strong>${profile.username || 'User'}:</strong> ${msg.content}`;
+  const badge = profile.is_admin ? '<span class="admin-badge">Admin</span>' : '';
+div.innerHTML = `<strong>${profile.username || 'User'}</strong> ${badge}: ${msg.content}`;
+
   chatBox.appendChild(div);
 }
+
 
 // Send message
 chatForm.addEventListener('submit', async (e) => {

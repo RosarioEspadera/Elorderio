@@ -110,13 +110,21 @@ async function renderMessage(msg) {
   chatBox.appendChild(div);
 }
 async function fetchProfile(userId) {
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('username, is_admin')
-    .eq('id', userId)
-    .single();
+  const response = await fetch(`https://bcmibfnrydyzomootwcb.supabase.co/rest/v1/profiles?select=username,is_admin&id=eq.${userId}`, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Accept': 'application/json'
+    }
+  });
 
-  return data || { username: 'User', is_admin: false };
+  if (!response.ok) {
+    console.error('Failed to fetch profile:', response.status);
+    return { username: 'User', is_admin: false };
+  }
+
+  const data = await response.json();
+  return data[0] || { username: 'User', is_admin: false };
 }
 
 

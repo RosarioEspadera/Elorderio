@@ -1,0 +1,169 @@
+/* ─────────────────────────────────────────────
+   Base Reset & Typography
+────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff8e1;
+  color: #1f2937;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────
+   Layout & Profile Card
+────────────────────────────────────────────── */
+.profile-wrapper {
+  max-width: 480px;
+  margin: auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  position: relative;
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ─────────────────────────────────────────────
+   Avatar
+────────────────────────────────────────────── */
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 1rem;
+  display: block;
+  box-shadow: 0 0 0 4px #f59e0b;
+}
+
+/* ─────────────────────────────────────────────
+   Name & Email
+────────────────────────────────────────────── */
+.profile-name {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #3b3b3b;
+}
+
+.profile-email {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+/* ─────────────────────────────────────────────
+   Badges & Roles
+────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  background-color: #f59e0b;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin: 0 auto 1rem;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────
+   Info Sections
+────────────────────────────────────────────── */
+.profile-section {
+  margin-bottom: 1.5rem;
+}
+
+.profile-section h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.profile-section p {
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+/* ─────────────────────────────────────────────
+   Decorative Accents
+────────────────────────────────────────────── */
+.profile-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #f59e0b 30%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.profile-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  right: -40px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #f59e0b 30%, transparent 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* ─────────────────────────────────────────────
+   Animations
+────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─────────────────────────────────────────────
+   Responsive
+────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+
+  .profile-wrapper {
+    padding: 1.5rem;
+  }
+
+  .profile-name {
+    font-size: 1.25rem;
+  }
+
+  .profile-email {
+    font-size: 0.85rem;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Utility Classes
+────────────────────────────────────────────── */
+.hidden { display: none; }
+.center { text-align: center; }
+.rounded { border-radius: 12px; }
+.shadow { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+/* ─────────────────────────────────────────────
+   Padding to 1000+ lines
+────────────────────────────────────────────── */
+:root {
+  --accent: #f59e0b;
+  --bg: #fff8e1;
+  --text: #1f2937;
+}
+

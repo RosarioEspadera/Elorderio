@@ -11,11 +11,41 @@ const chatInput = document.getElementById('chat-input');
 
 let currentUser = null;
 
-// Get current user
+// Get current user and ensure profile exists
 async function getUser() {
   const { data, error } = await supabase.auth.getUser();
-  if (error) console.error('Error fetching user:', error);
-  else currentUser = data.user;
+  if (error || !data?.user) {
+    console.error('Error fetching user:', error);
+    return;
+  }
+
+  currentUser = data.user;
+
+  const { data: profile, error: profileErr } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', currentUser.id)
+    .maybeSingle();
+
+  if (profileErr) {
+    console.error('Error checking profile:', profileErr);
+    return;
+  }
+
+  if (!profile) {
+    const { error: insertErr } = await supabase.from('profiles').insert({
+      id: currentUser.id,
+      username: currentUser.user_metadata?.name || 'Anonymous',
+      avatar_url: currentUser.user_metadata?.avatar_url || null,
+      is_admin: false
+    });
+
+    if (insertErr) {
+      console.error('Error inserting profile:', insertErr);
+    } else {
+      console.log('Profile created for user:', currentUser.id);
+    }
+  }
 }
 
 // Load messages
@@ -25,20 +55,32 @@ async function loadMessages() {
     .select('content, created_at, sender_id, profiles(username, is_admin)')
     .order('created_at', { ascending: true });
 
-  if (error) console.error('Error loading messages:', error);
-  else renderMessages(data);
+  if (error) {
+    console.error('Error loading messages:', error);
+    return;
+  }
+
+  renderMessages(data);
 }
 
 // Render messages
 function renderMessages(messages) {
   chatBox.innerHTML = '';
+
+  if (!messages.length) {
+    chatBox.innerHTML = '<p class="chat-message">No messages yet. Start the conversation!</p>';
+    return;
+  }
+
   messages.forEach(msg => {
     const div = document.createElement('div');
     div.className = 'chat-message';
     if (msg.profiles?.is_admin) div.classList.add('admin-message');
+
     div.innerHTML = `<strong>${msg.profiles?.username || 'User'}:</strong> ${msg.content}`;
     chatBox.appendChild(div);
   });
+
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
@@ -53,17 +95,22 @@ chatForm.addEventListener('submit', async (e) => {
     content
   });
 
-  if (error) console.error('Error sending message:', error);
+  if (error) {
+    console.error('Error sending message:', error);
+    return;
+  }
+
   chatInput.value = '';
 });
 
 // Real-time updates
 supabase
   .channel('group-chat')
-  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+  .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, () => {
     loadMessages(); // Re-fetch to get profile info
   })
   .subscribe();
 
+// Init
 await getUser();
 await loadMessages();

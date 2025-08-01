@@ -31,15 +31,22 @@ console.log({ name, email, password });
     return;
   }
 
-  if (data?.user) {
-    await supabase.from('profiles').insert({
-      id: data.user.id,
-      user_id: data.user.id,
-      email: data.user.email,
-      username: name
-    });
+ const { data: { user } } = await supabase.auth.getUser();
+
+const { data: existingProfile } = await supabase
+  .from('profiles')
+  .select('id')
+  .eq('id', user.id)
+  .single();
+
+if (!existingProfile) {
+  await supabase.from('profiles').insert({
+    id: user.id,
+    user_id: user.id,
+    email: user.email,
+    username: user.user_metadata.name
+  });
 
     alert('Account created! Please check your inbox to confirm.');
-    window.location.href = 'profile.html';
   }
 };

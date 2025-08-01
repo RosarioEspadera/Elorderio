@@ -72,9 +72,21 @@ function updateCartPreview() {
 }
 
 function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCartPreview();
+  const cartTable = document.getElementById('cart-table');
+  const rows = cartTable.getElementsByTagName('tr');
+  if (rows[index]) {
+    const priceCell = rows[index].querySelector('td:last-child');
+    const price = parseFloat(priceCell.textContent.replace(/[₱,]/g, ''));
+    rows[index].remove();
+
+    const totalEl = document.getElementById('cart-total');
+    if (totalEl) {
+      let currentTotal = parseFloat(totalEl.textContent.replace(/[₱,]/g, ''));
+      totalEl.textContent = `₱ ${currentTotal - price}`;
+    }
+  }
 }
+
 
 // 🧾 Helper for order form
 function generateItemListText() {

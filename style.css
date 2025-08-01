@@ -277,7 +277,56 @@ body[data-theme='dark'] .dish-card {
 body[data-theme='dark'] .dish-info h2 {
   color: #fbbf24;
 }
+body[data-theme='dark'] .order-wrapper {
+  background-color: #2a2a2a;
+  border: 1px solid #3f3f3f;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 0 0 1px #3f3f3f inset;
+  color: #f3f3f3;
+}
+body[data-theme='dark'] .order-item:hover {
+  background-color: #333;
+  transition: background-color 0.2s ease;
+}
 
+
+body[data-theme='dark'] .cart-total {
+  background-color: #1f1f1f;
+  border-top: 1px solid #444;
+  padding: 1rem;
+  font-size: 1.2rem;
+  color: #fbbf24;
+  text-align: right;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+body[data-theme='dark'] .cart-total strong {
+  color: #ffe58f;
+  text-shadow: 0 0 6px #fbbf24;
+}
+
+
+.theme-toggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #78350f;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.theme-toggle:hover {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  transform: scale(1.05);
+}
 
 
 

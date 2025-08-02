@@ -1,6 +1,16 @@
 /* ─────────────────────────────────────────────
    Base Reset & Typography
 ────────────────────────────────────────────── */
+:root {
+  --cafe-brown: #6f4e37;
+  --cafe-cream: #fff8f0;
+  --cafe-accent: #c99c79;
+  --radius: 10px;
+  --font-body: 'Inter', sans-serif;
+  --font-logo: 'Pacifico', cursive;
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -18,18 +28,33 @@ body {
 /* ─────────────────────────────────────────────
    Layout & Card
 ────────────────────────────────────────────── */
-.login-wrapper {
-  max-width: 420px;
-  margin: auto;
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  padding: 2.5rem;
-  transition: box-shadow 0.3s ease;
+/* 🧋 Sign-In Modal Styling */
+#LogInModal {
+  max-width: 400px;
+  padding: 2rem;
+  background-color: var(--cafe-cream);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-family: var(--font-body);
+  animation: fadeInUp 0.4s ease;
 }
 
-.login-wrapper:hover {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+/* 🎬 Modal Animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🧁 Branding Section */
+.modal-branding {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.brand-logo {
+  max-width: 80px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -46,41 +71,47 @@ h2 {
 /* ─────────────────────────────────────────────
    Inputs
 ────────────────────────────────────────────── */
-input[type="email"],
-input[type="password"] {
+/* ✍️ Input Fields */
+input {
   width: 100%;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.25rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cafe-accent);
+  border-radius: var(--radius);
+  background-color: #ffffff;
+  color: var(--cafe-brown);
   font-size: 1rem;
-  background-color: #fffdf5;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.3s ease;
 }
-
 input:focus {
-  border-color: #f59e0b;
+  border-color: var(--cafe-brown);
   outline: none;
 }
-
 /* ─────────────────────────────────────────────
    Button
 ────────────────────────────────────────────── */
+/* ☕ Form Button Group */
+menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/* 🍯 Action Buttons */
 button {
-  width: 100%;
-  background-color: #f59e0b;
-  color: white;
-  padding: 0.75rem;
+  padding: 0.75rem 1.2rem;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius);
+  font-weight: bold;
   font-size: 1rem;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-family: var(--font-body);
 }
 
 button:hover {
-  background-color: #d97706;
+  transform: scale(1.02);
 }
 
 /* ─────────────────────────────────────────────
@@ -102,78 +133,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* ─────────────────────────────────────────────
-   Decorative Accents
-────────────────────────────────────────────── */
-.login-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -40px;
-  left: -40px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, #f59e0b 30%, transparent 70%);
-  border-radius: 50%;
-  z-index: -1;
-}
 
-.login-wrapper::after {
-  content: '';
-  position: absolute;
-  bottom: -40px;
-  right: -40px;
-  width: 80px;
-  height: 80px;
-  background: radial-gradient(circle, #f59e0b 30%, transparent 70%);
-  border-radius: 50%;
-  z-index: -1;
-}
-
-/* ─────────────────────────────────────────────
-   Animations
-────────────────────────────────────────────── */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.login-wrapper {
-  animation: fadeIn 0.6s ease-out;
-}
-
-/* ─────────────────────────────────────────────
-   Responsive
-────────────────────────────────────────────── */
-@media (max-width: 480px) {
-  body {
-    padding: 1rem;
-  }
-
-  .login-wrapper {
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.5rem;
-  }
-
-  input, button {
-    font-size: 0.95rem;
-  }
-}
-
-/* ─────────────────────────────────────────────
-   Extra Styling (Padding to 1000 lines)
-────────────────────────────────────────────── */
-/* Decorative spacing */
-.login-wrapper::marker,
-input::placeholder,
-button::after,
-button::before,
-input::after,
-input::before {
-  content: '';
-}
 
 /* Extra utility classes */
 .hidden { display: none; }
@@ -182,12 +142,9 @@ input::before {
 .rounded { border-radius: 12px; }
 .shadow { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-/* Padding filler to reach 1000 lines */
-:root {
-  --accent: #f59e0b;
-  --bg: #fff8e1;
-  --text: #1f2937;
-}
+
+
+
 
 
 

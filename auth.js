@@ -11,52 +11,71 @@ const supabase = createClient(
 // ——————————————————————————————————————————————————
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.getElementById('loginButton');
-  loginBtn?.addEventListener('click', login);
+  loginBtn?.addEventListener('click', handleLogin);
 
-  checkAndCreateProfile(); // Run after login if user is confirmed
+  checkAndCreateProfile(); // Ensure profile exists if already logged in
 });
 
-async function login() {
-  const email = document.getElementById('email')?.value.trim();
-  const password = document.getElementById('password')?.value;
+
+// ——————————————————————————————————————————————————
+// Login Handler
+// ——————————————————————————————————————————————————
+async function handleLogin() {
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  const email = emailInput?.value.trim();
+  const password = passwordInput?.value;
 
   if (!email || !password) {
     alert('Please enter both email and password.');
     return;
   }
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  try {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) {
-    alert(`Login failed: ${error.message}`);
-  } else {
-    window.location.href = 'profile.html';
+    if (error) {
+      alert(`Login failed: ${error.message}`);
+    } else {
+      window.location.href = 'profile.html';
+    }
+  } catch (err) {
+    console.error('Unexpected login error:', err);
+    alert('Something went wrong. Please try again.');
   }
 }
 
+// ——————————————————————————————————————————————————
+// Profile Check & Creation
+// ——————————————————————————————————————————————————
 async function checkAndCreateProfile() {
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error || !user) return;
+  try {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) return;
 
-  const { data: existingProfile } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('id', user.id)
-    .single();
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single();
 
-  if (!existingProfile) {
-    const { error: insertError } = await supabase.from('profiles').insert({
-      id: user.id,
-      user_id: user.id,
-      email: user.email,
-      username: user.user_metadata?.name || 'New User'
-    });
+    if (profileError || !profile) {
+      const { error: insertError } = await supabase.from('profiles').insert({
+        id: user.id,
+        user_id: user.id,
+        email: user.email,
+        username: user.user_metadata?.name || 'New User'
+      });
 
-    if (insertError) {
-      console.error('Profile insert error:', insertError);
-    } else {
-      console.log('Profile created successfully.');
+      if (insertError) {
+        console.error('Profile creation failed:', insertError);
+      } else {
+        console.log('Profile created successfully.');
+      }
     }
+  } catch (err) {
+    console.error('Unexpected profile check error:', err);
   }
 }
 

@@ -46,9 +46,78 @@ body {
 }
 
 /* 🧁 Branding Section */
-.modal-branding {
+/* Base modal styling */
+.modal {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  padding: 2rem;
+  border: none;
+  border-radius: 1rem;
+  background: linear-gradient(to bottom right, #fff8e1, #ffe0b2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+  color: #4b2e2e;
   text-align: center;
+}
+
+/* Branding section */
+.modal-branding {
   margin-bottom: 1.5rem;
+}
+
+.modal-branding img.brand-logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 0.5rem;
+}
+
+.modal-branding h2 {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.8rem;
+  color: #6d4c41;
+}
+
+/* Input fields */
+.modal input[type="email"],
+.modal input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border: 1px solid #d7ccc8;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  font-size: 1rem;
+}
+
+/* Login button */
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #f4511e;
+}
+
+/* Link to sign up */
+.modal p {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.modal a#createAccountLink {
+  color: #ff7043;
+  text-decoration: underline;
+  font-weight: 500;
 }
 
 .brand-logo {

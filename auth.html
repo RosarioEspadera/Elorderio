@@ -12,16 +12,23 @@
  
 </head>
 <body class="bg-amber-50 text-gray-900 font-sans p-6">
-  <div class="login-wrapper">
-    <h2>Login to Curio</h2>
+  <dialog id="signInModal" class="modal">
+    <div class="modal-branding">
+      <img src="assets/favicon.png" alt="Rio's Logo" class="brand-logo" />
+    <h2>Login to Elorderio</h2>
+    </div>
+    <form id="signInForm" novalidate>
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
+      <menu>
    <button id="loginButton">Login</button>
+         </menu>
+       </form>
 <p>
   Don’t have an account?
   <a href="signUp.html" id="createAccountLink">Create Account</a>
 </p>
- </div>
+    </dialog>
   <script type="module" src="auth.js"></script>
 </body>
 </html>

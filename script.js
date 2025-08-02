@@ -71,13 +71,12 @@ function updateCartPreview() {
   totalEl.textContent = `₱ ${total}`;
 }
 
-function removeFromCart(index) {
+window.removeFromCart = function(index) {
   if (cart[index]) {
-    cart.splice(index, 1); // Remove item from cart array
-    updateCartPreview();   // Re-render cart table and total
+    cart.splice(index, 1);
+    updateCartPreview();
   }
-}
-
+};
 
 
 // 🧾 Helper for order form

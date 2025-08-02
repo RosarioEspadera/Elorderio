@@ -61,7 +61,7 @@ function updateCartPreview() {
     <tr>
       <td>
         ${item.name} × ${item.quantity}
-        <button onclick="removeFromCart(${index})" style="margin-left:8px; color:red;">✕</button>
+        <button onclick="removeFromCart(${index})" style="margin-left:8px; color:red;">🗑️</button>
       </td>
       <td align="right">₱ ${item.price * item.quantity}</td>
     </tr>

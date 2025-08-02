@@ -307,56 +307,93 @@ body[data-theme='dark'] .cart-total strong {
 
 
 .theme-toggle {
-  position: absolute;
+  position: fixed;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #78350f;
+  background-color: #fff8e1;
+  color: #6d4c41;
   border: none;
   border-radius: 999px;
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
   z-index: 1000;
 }
+
+[data-theme="dark"] .theme-toggle {
+  background-color: #4e342e;
+  color: #fff8e1;
+}
+
 
 .theme-toggle:hover {
   background: linear-gradient(135deg, #f59e0b, #fbbf24);
   transform: scale(1.05);
 }
-body[data-theme='dark'] #cart-table {
-  background-color: #2a2a2a;
-  border-collapse: collapse;
-  width: 100%;
-  color: #f3f3f3;
+/* Cart preview container */
+[data-theme="dark"] .cart-preview {
+  background-color: #2c2c2c;
+  color: #f5f5f5;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
-body[data-theme='dark'] #cart-table td {
-  padding: 0.75rem 1rem;
+/* Cart item */
+[data-theme="dark"] .cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
   border-bottom: 1px solid #444;
 }
 
-body[data-theme='dark'] #cart-table tr:last-child td {
+[data-theme="dark"] .cart-item:last-child {
   border-bottom: none;
 }
 
-body[data-theme='dark'] #cart-table button {
-  background: none;
+/* Remove button */
+[data-theme="dark"] .cart-item .remove-btn {
+  background: transparent;
+  color: #ff8a65;
   border: none;
-  color: #ff6b6b;
-  font-size: 1rem;
   cursor: pointer;
-  transition: color 0.2s ease;
+  font-size: 1rem;
 }
 
-body[data-theme='dark'] #cart-table button:hover {
-  color: #ff9e9e;
+/* Total section */
+[data-theme="dark"] .cart-total {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffe0b2;
 }
-body[data-theme='dark'] #cart-table tr:hover {
-  background-color: #333;
+
+/* Order form fields */
+[data-theme="dark"] .order-form input,
+[data-theme="dark"] .order-form textarea {
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+}
+
+/* Submit button */
+[data-theme="dark"] .order-form button {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] .order-form button:hover {
+  background-color: #f4511e;
 }
 
 

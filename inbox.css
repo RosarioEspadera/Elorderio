@@ -344,25 +344,28 @@ html, body {
     Dark Theme
 ────────────────────────────────────────────── */
 .theme-toggle {
-  position: absolute;
+  position: fixed;
   top: 1rem;
   right: 1rem;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-  color: #78350f;
+  background-color: #fff8e1;
+  color: #6d4c41;
   border: none;
   border-radius: 999px;
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
   z-index: 1000;
 }
-
 .theme-toggle:hover {
   background: linear-gradient(135deg, #f59e0b, #fbbf24);
   transform: scale(1.05);
+}
+[data-theme="dark"] .theme-toggle {
+  background-color: #4e342e;
+  color: #fff8e1;
 }
 
 body[data-theme='dark'] {

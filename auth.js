@@ -12,6 +12,9 @@ const supabase = createClient(
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.getElementById('loginButton');
   loginBtn?.addEventListener('click', handleLogin);
+  
+  const loginModal = document.getElementById('LogInModal');
+  loginModal?.showModal(); // Show the modal when page loads
 
   checkAndCreateProfile(); // Ensure profile exists if already logged in
 });
